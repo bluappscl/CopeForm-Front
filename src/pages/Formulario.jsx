@@ -15,9 +15,11 @@ import Copyright from '../components/Copyright';
 import Solicitante from './Formulario/Solicitante';
 import EstructuraProductiva from './Formulario/EstructuraProductiva';
 import PersonaJuridica from './Formulario/PersonaJuridica';
+import EncargadoDeCompra from './Formulario/EncargadoDeCompra';
+import Archivos from './Formulario/Archivos';
 
 
-const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica'];
+const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
 
 function getStepContent(step) {
   switch (step) {
@@ -27,6 +29,10 @@ function getStepContent(step) {
       return <EstructuraProductiva />;
     case 2:
       return <PersonaJuridica />;
+    case 3:
+      return <EncargadoDeCompra />;
+    case 4:
+      return <Archivos />;
     default:
       throw new Error('Unknown step');
   }
@@ -99,7 +105,7 @@ export default function Formulario() {
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Continuar '}
+                  {activeStep === steps.length - 1 ? 'Enviar' : 'Continuar '}
                 </Button>
               </Box>
             </React.Fragment>

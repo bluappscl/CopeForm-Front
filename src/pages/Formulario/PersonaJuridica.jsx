@@ -4,45 +4,60 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-
-const products = [
-  {
-    name: 'Product 1',
-    desc: 'A nice thing',
-    price: '$9.99',
-  },
-  {
-    name: 'Product 2',
-    desc: 'Another thing',
-    price: '$3.45',
-  },
-  {
-    name: 'Product 3',
-    desc: 'Something else',
-    price: '$6.51',
-  },
-  {
-    name: 'Product 4',
-    desc: 'Best thing of all',
-    price: '$14.11',
-  },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+import { Box, Button, IconButton, TextField } from '@mui/material';
+import { orange, red } from '@mui/material/colors';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function PersonaJuridica() {
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-      Persona Jurídica
-      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Typography variant="h6" gutterBottom>
+          Persona
+        </Typography>
+        <Button variant="contained" sx={{
+          backgroundColor: orange[600],
+          '&:hover': { backgroundColor: orange[700] },
+          ml: 'auto',
+        }}>
+          Agregar
+        </Button>
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 3, mt:4}} alignItems="center">
+        <TextField
+          required
+          id="rut"
+          name="rut"
+          label="Rut/Rep"
+          fullWidth
+          variant="standard"
+        />
+        <TextField
+          required
+          id="participation"
+          name="participation"
+          label="Participacion"
+          fullWidth
+          variant="standard"
+        />
+        <TextField
+          required
+          id="phone"
+          name="phone"
+          label="Numero telfónico"
+          fullWidth
+          variant="standard"
+        />
+        <IconButton
+          sx={{
+            backgroundColor: red[600],
+            '&:hover': { backgroundColor: red[700] },
+          }}
+        >
+          <ClearIcon fontSize='small' sx={{color:"white"}}></ClearIcon>
+        </IconButton>
+      </Box>
+
     </React.Fragment>
   );
 }

@@ -5,9 +5,11 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton } from '@mui/material';
 import BasicSelect from '../../components/Select';
 import { orange } from '@mui/material/colors';
+import ColumnVirtualizationGrid from '../../components/DataGrid';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 export default function EstructuraProductiva() {
   return (
@@ -66,6 +68,19 @@ export default function EstructuraProductiva() {
                 multiline
                 rows={6}
               />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
+                <ColumnVirtualizationGrid />
+                <IconButton variant="contained" sx={{
+                  backgroundColor: orange[600],
+                  '&:hover': { backgroundColor: orange[700] },
+                }}>
+                  <FileDownloadIcon></FileDownloadIcon>
+                </IconButton>
+                <ColumnVirtualizationGrid />
+              </Box>
             </Grid>
           </Grid>
         </AccordionDetails>
