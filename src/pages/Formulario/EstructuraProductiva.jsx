@@ -2,17 +2,18 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton } from '@mui/material';
 import BasicSelect from '../../components/Select';
 import { orange } from '@mui/material/colors';
-import ColumnVirtualizationGrid from '../../components/DataGrid';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import EspeciesCantidad from '../../components/EspeciesCantidad';
+import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
+import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesExistentes';
+import { useState } from 'react';
 
 export default function EstructuraProductiva() {
+  const [selectedEspecies, setSelectedEspecies] = useState([]);
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -73,12 +74,19 @@ export default function EstructuraProductiva() {
 
             <Grid item xs={12} md={12}>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
-                <ColumnVirtualizationGrid />
+                <EspeciesExistentes
+                  returnIdList={(idList) => {
+                    setSelectedEspecies(() => {
+                      console.log(idList);
+                      return idList;
+                    });
+                  }}
+                />
                 <IconButton variant="contained" sx={{
                   backgroundColor: orange[600],
                   '&:hover': { backgroundColor: orange[700] },
                 }}>
-                  <FileDownloadIcon/>
+                  <FileDownloadIcon />
                 </IconButton>
                 <EspeciesCantidad />
               </Box>

@@ -13,7 +13,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Copyright from '../components/Copyright';
 import Solicitante from './Formulario/Solicitante';
-import EstructuraProductiva from './Formulario/EstructuraProductiva';
+import EstructuraProductiva from '../pages/Formulario/EstructuraProductiva.jsx'
 import PersonaJuridica from './Formulario/PersonaJuridica';
 import EncargadoDeCompra from './Formulario/EncargadoDeCompra';
 import Archivos from './Formulario/Archivos';
@@ -21,12 +21,12 @@ import Archivos from './Formulario/Archivos';
 
 const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
 
-function getStepContent(step) {
+function getStepContent(step, next) {
   switch (step) {
     case 0:
-      return <Solicitante />;
+      return <Solicitante handleNext={next} />;
     case 1:
-      return <EstructuraProductiva />;
+      return <EstructuraProductiva handleNext={next} />;
     case 2:
       return <PersonaJuridica />;
     case 3:
@@ -63,7 +63,7 @@ export default function Formulario() {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            
+
           </Typography>
         </Toolbar>
       </AppBar>
@@ -85,13 +85,13 @@ export default function Formulario() {
                 Solicitud enviada con exito.
               </Typography>
               <Typography variant="subtitle1">
-                Hemos recibido tu solicitud correctamente, nos 
+                Hemos recibido tu solicitud correctamente, nos
                 comunicaremos contigo cuando tu solicitud haya sido revisada.
               </Typography>
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {getStepContent(activeStep, handleNext)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
