@@ -10,7 +10,7 @@ export default function Archivos() {
     { title: "Balances", text: "Seleccionar Archivo" },
     { title: "Contratos Arriendos", text: "Seleccionar Archivo" },
     { title: "Mandatos Especial/Poderes", text: "Seleccionar Archivo" },
-    { title: "Otros Especificar:", text: "Seleccionar Archivo" },
+    { title: "Otros", text: "Seleccionar Archivo" },
   ];
 
   return (

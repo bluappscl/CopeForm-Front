@@ -56,8 +56,8 @@ export default function Solicitante() {
         <Grid item xs={12} sm={6}>
           <Typography>Direccion Tributaria</Typography>
           <Box display={"flex"} flexDirection={{ xs: 'column', md: 'row' }} gap={3}>
-            <BasicSelect></BasicSelect>
-            <BasicSelect></BasicSelect>
+            <BasicSelect label={"Region"}></BasicSelect>
+            <BasicSelect label={"Comuna"}></BasicSelect>
           </Box>
         </Grid>
 

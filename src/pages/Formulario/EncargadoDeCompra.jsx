@@ -15,7 +15,7 @@ export default function EncargadoDeCompra() {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                    <BasicSelect />
+                    <BasicSelect label={"Tipo de Encargado"} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField

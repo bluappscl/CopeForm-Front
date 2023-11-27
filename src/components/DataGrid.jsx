@@ -1,27 +1,49 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import { IconButton } from '@mui/material';
+import { orange } from '@mui/material/colors';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 function useData(rowLength) {
   const [data, setData] = React.useState({ columns: [], rows: [] });
 
+  const headerAlignProps = {
+    headerAlign: 'center',
+    align: 'center',
+  };
+  
   React.useEffect(() => {
     const rows = [];
 
     for (let i = 0; i < rowLength; i += 1) {
       const row = {
         id: i,
-        nombre: `Nombre ${i}`,
-        cantidad: Math.floor(Math.random() * 100) + 1, // Cantidad aleatoria para ejemplo
+        especie: `Especie ${i}`,
+        // Puedes personalizar la acción según tus necesidades
+        accion: (
+          <IconButton variant="contained" sx={{
+            backgroundColor: orange[600],
+            '&:hover': { backgroundColor: orange[700] },
+          }}>
+            <FileDownloadIcon/>
+          </IconButton>
+        ),
       };
 
       rows.push(row);
     }
 
     const columns = [
-      { field: 'id', headerName: 'ID', width: 100 },
-      { field: 'nombre', headerName: 'Nombre', width: 200 },
-      { field: 'cantidad', headerName: 'Cantidad', width: 150 },
+      { field: 'id', headerName: 'ID', flex: 1, ...headerAlignProps },
+      { field: 'especie', headerName: 'Especie', flex: 2, ...headerAlignProps },
+      { 
+        field: 'accion', 
+        headerName: 'Acción', 
+        flex: 2, 
+        ...headerAlignProps,
+        renderCell: (params) => params.value,
+      },
     ];
 
     setData({
@@ -29,6 +51,11 @@ function useData(rowLength) {
       columns,
     });
   }, [rowLength]);
+
+  const handleAction = (id) => {
+    // Lógica para manejar la acción según el ID
+    console.log(`Acción realizada para el ID ${id}`);
+  };
 
   return data;
 }
@@ -38,7 +65,7 @@ export default function ColumnVirtualizationGrid() {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid {...data} checkboxSelection />
+      <DataGrid {...data} />
     </div>
   );
 }

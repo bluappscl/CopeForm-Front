@@ -10,6 +10,7 @@ import BasicSelect from '../../components/Select';
 import { orange } from '@mui/material/colors';
 import ColumnVirtualizationGrid from '../../components/DataGrid';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import EspeciesCantidad from '../../components/EspeciesCantidad';
 
 export default function EstructuraProductiva() {
   return (
@@ -46,9 +47,9 @@ export default function EstructuraProductiva() {
                   justifyContent: 'center',
                 }}
               >
-                <BasicSelect></BasicSelect>
-                <BasicSelect></BasicSelect>
-                <BasicSelect></BasicSelect>
+                <BasicSelect label={"Sector Predominante"}></BasicSelect>
+                <BasicSelect label={"Tenencia de Predios"}></BasicSelect>
+                <BasicSelect label={"Comuna"}></BasicSelect>
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -77,9 +78,9 @@ export default function EstructuraProductiva() {
                   backgroundColor: orange[600],
                   '&:hover': { backgroundColor: orange[700] },
                 }}>
-                  <FileDownloadIcon></FileDownloadIcon>
+                  <FileDownloadIcon/>
                 </IconButton>
-                <ColumnVirtualizationGrid />
+                <EspeciesCantidad />
               </Box>
             </Grid>
           </Grid>

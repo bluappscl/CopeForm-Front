@@ -63,7 +63,7 @@ export default function Formulario() {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            GTY
+            
           </Typography>
         </Toolbar>
       </AppBar>
@@ -82,12 +82,11 @@ export default function Formulario() {
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                Solicitud enviada con exito.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                Hemos recibido tu solicitud correctamente, nos 
+                comunicaremos contigo cuando tu solicitud haya sido revisada.
               </Typography>
             </React.Fragment>
           ) : (

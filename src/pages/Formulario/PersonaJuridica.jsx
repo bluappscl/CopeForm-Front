@@ -44,7 +44,7 @@ export default function PersonaJuridica() {
           required
           id="phone"
           name="phone"
-          label="Numero telfónico"
+          label="Numero telefónico"
           fullWidth
           variant="standard"
         />
