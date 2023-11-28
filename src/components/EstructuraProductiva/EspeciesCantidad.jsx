@@ -5,13 +5,12 @@ import Button from '@mui/material/Button';
 import { IconButton } from '@mui/material';
 import { red } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axiosInstance from '../../../axiosInstance';
-import { useState } from 'react';
 
-function EspeciesCantidad() {
+function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
-  const [selectedIds, setSelectedIds] = useState([2, 3]);
+  const [idList, setIdList] = useState([]);
 
   const headerAlignProps = {
     headerAlign: 'center',
@@ -19,27 +18,58 @@ function EspeciesCantidad() {
   };
 
   useEffect(() => {
-    const requestData = {selectedIds};
-    axiosInstance.get("/especies/byIds", requestData  )
+    setIdList(arrayIds);
+  }, [arrayIds]);
+
+  const removeId = (idToRemove) => {
+    setIdList((prevIdList) => {
+      const updatedIdList = prevIdList.filter((id) => id !== idToRemove);
+      if (updatedIdList.length === 0) {
+        alert('El array no puede estar vacío.');
+      } else {
+        returnArrayIds(updatedIdList);
+      }
+    });
+  };
+
+  const handleCantidadChange = (id, newValue) => {
+    setEspeciesData((prevData) => {
+      const updatedRows = prevData.rows.map((row) =>
+        row.id === id ? { ...row, cantidad: newValue } : row
+      );
+      const newData = { ...prevData, rows: updatedRows };
+      returnEspecies(newData.rows);
+      return newData;
+    });
+  };
+
+  useEffect(() => {
+    axiosInstance.post("/especies/byIds", { ids: arrayIds })
       .then((response) => {
         const especies = response.data;
-        console.log(especies);
 
-        const rows = especies.map((especie) => ({
-          id: especie.id,
-          especie: especie.nombre,
-          cantidad: 0,
-          accion: (
-            <IconButton
-              sx={{
-                backgroundColor: red[600],
-                '&:hover': { backgroundColor: red[700] },
-              }}
-            >
-              <ClearIcon fontSize='small' sx={{ color: "white" }}></ClearIcon>
-            </IconButton>
-          ),
-        }))
+        const existingRows = especiesData.rows.filter(row => arrayIds.includes(row.id));
+
+        const newRows = especies
+          .filter(especie => !especiesData.rows.some(row => row.id === especie.id))
+          .map((especie) => ({
+            id: especie.id,
+            especie: especie.nombre,
+            cantidad: "",
+            accion: (
+              <IconButton
+                sx={{
+                  backgroundColor: red[600],
+                  '&:hover': { backgroundColor: red[700] },
+                }}
+                onClick={() => removeId(especie.id)}
+              >
+                <ClearIcon fontSize='small' sx={{ color: "white" }}></ClearIcon>
+              </IconButton>
+            ),
+          }));
+
+        const updatedRows = [...existingRows, ...newRows];
 
         const columns = [
           { field: 'id', headerName: 'ID', flex: 1, ...headerAlignProps },
@@ -56,6 +86,7 @@ function EspeciesCantidad() {
                 size="small"
                 fullWidth
                 value={params.value}
+                onChange={(e) => handleCantidadChange(params.id, e.target.value)}
               />
             ),
           },
@@ -69,22 +100,19 @@ function EspeciesCantidad() {
         ];
 
         setEspeciesData({
-          rows,
+          rows: updatedRows,
           columns,
         });
+
+        // Llama a returnEspecies con los datos actualizados
+        returnEspecies(updatedRows);
 
       })
       .catch((error) => {
         console.error('Error al obtener los datos de la API:', error);
       });
 
-  }, []);
-
-  const handleAction = (id) => {
-    // Lógica para manejar la acción según el ID
-    console.log(`Acción realizada para el ID ${id}`);
-  };
-
+  }, [arrayIds]);
 
   const localizedTextsMap = {
     columnMenuUnsort: "Desordenar",
@@ -97,7 +125,7 @@ function EspeciesCantidad() {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid {...especiesData} localeText={localizedTextsMap} />
+        <DataGrid {...especiesData} localeText={localizedTextsMap} />
     </div>
   );
 }

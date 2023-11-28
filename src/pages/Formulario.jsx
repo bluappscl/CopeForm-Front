@@ -72,9 +72,9 @@ export default function Formulario() {
           <Typography component="h1" variant="h4" align="center">
             Solicitud de Credito
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
+          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+            {steps.map((label, index) => (
+              <Step key={label} sx={{ flex: '1' }}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}

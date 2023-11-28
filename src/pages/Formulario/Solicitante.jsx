@@ -14,7 +14,6 @@ import FormikSelect from '../../components/FormikSelect';
 
 
 export default function Solicitante({ handleNext }) {
-  
   const regionOptions = [
     { value: 'region1', label: 'Región 1' },
     { value: 'region2', label: 'Región 2' },

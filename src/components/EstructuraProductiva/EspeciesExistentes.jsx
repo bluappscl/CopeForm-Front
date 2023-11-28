@@ -6,15 +6,17 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axiosInstance from '../../../axiosInstance';
 import { useEffect, useState } from 'react';
 
-function EspeciesExistentes({ returnIdList }) {
+function EspeciesExistentes({ arrayIds, returnIdList }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [idList, setIdList] = useState([]);
 
+  useEffect(() => {
+    setIdList(arrayIds);
+  }, [arrayIds]);
+
   const addId = (id) => {
     setIdList((prevIdList) => {
-      if (prevIdList.includes(id)) {
-        console.log("Elemento repetido");
-        console.log(prevIdList);
+      if (prevIdList.includes(id) || arrayIds.includes(id)) {
         return prevIdList;
       } else {
         const updatedIdList = [...prevIdList, id];
@@ -22,12 +24,7 @@ function EspeciesExistentes({ returnIdList }) {
         return updatedIdList;
       }
     });
-
-    // Llama a la función del componente padre con el array actualizado
-
   }
-
-
 
   useEffect(() => {
     axiosInstance.get("/especies/all")
