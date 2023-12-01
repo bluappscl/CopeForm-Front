@@ -3,8 +3,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { orange } from '@mui/material/colors';
+import { useFormContext } from '../../context/FormContext';
+import StepController from '../../components/Formulario/StepController';
 
 export default function Archivos() {
+
+  const { handleNext } = useFormContext();
+
   const buttonsData = [
     { title: "Carpeta Tributaria*", text: "Seleccionar Archivo" },
     { title: "Balances", text: "Seleccionar Archivo" },
@@ -38,6 +43,7 @@ export default function Archivos() {
           </Grid>
         ))}
       </Grid>
+      <StepController />
     </React.Fragment>
   );
 }

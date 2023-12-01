@@ -13,6 +13,9 @@ import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCant
 import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesExistentes';
 import { useState, useEffect } from 'react';
 import FormikSelect from '../../components/FormikSelect';
+import StepController from '../../components/Formulario/StepController';
+import { useFormContext } from '../../context/FormContext';
+import { handleFormMove } from '../../utils/formUtils';
 
 const sectorPredominante = [
   { value: 1, label: 'sector predominante 1' },
@@ -41,8 +44,11 @@ const validationSchema = Yup.object({
 
 export default function EstructuraProductiva() {
 
+  const { handleBack, handleNext, clickedButton, formEstructuraProductiva } = useFormContext();
+
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedEspecies, setSelectedEspecies] = useState(null);
+
 
   useEffect(() => {
     console.log('Updated selectedEspecies:', selectedEspecies);
@@ -55,11 +61,11 @@ export default function EstructuraProductiva() {
       comuna: '',
       rol: '',
       principalesSocios: '',
+      ...formEstructuraProductiva,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // Aquí puedes manejar la lógica para enviar los datos del formulario.
-      console.log('Formulario enviado:', values);
+      handleFormMove(clickedButton, handleBack, handleNext, values);
     },
   });
 
@@ -135,9 +141,8 @@ export default function EstructuraProductiva() {
                   label="Rol"
                   fullWidth
                   variant="standard"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   value={formik.values.rol}
+                  onChange={formik.handleChange}
                   error={formik.touched.rol && Boolean(formik.errors.rol)}
                   helperText={formik.touched.rol && formik.errors.rol}
                 />
@@ -150,9 +155,8 @@ export default function EstructuraProductiva() {
                   fullWidth
                   multiline
                   rows={6}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   value={formik.values.principalesSocios}
+                  onChange={formik.handleChange}
                   error={formik.touched.principalesSocios && Boolean(formik.errors.principalesSocios)}
                   helperText={formik.touched.principalesSocios && formik.errors.principalesSocios}
                 />
@@ -187,6 +191,7 @@ export default function EstructuraProductiva() {
               </Grid>
             </Grid>
             <Button type='submit' variant='outlined'>Enviar</Button>
+            <StepController />
           </form>
         </AccordionDetails>
       </Accordion>

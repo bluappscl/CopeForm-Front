@@ -17,16 +17,20 @@ import EstructuraProductiva from '../pages/Formulario/EstructuraProductiva.jsx'
 import PersonaJuridica from './Formulario/PersonaJuridica';
 import EncargadoDeCompra from './Formulario/EncargadoDeCompra';
 import Archivos from './Formulario/Archivos';
-
+import { useFormContext } from '../context/FormContext.jsx';
+import { useFormik } from 'formik';
+import StepController from '../components/Formulario/StepController.jsx';
+import { useEffect } from 'react';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
 
-function getStepContent(step, next) {
+function getStepContent(step) {
   switch (step) {
     case 0:
-      return <Solicitante handleNext={next} />;
+      return <Solicitante />;
     case 1:
-      return <EstructuraProductiva handleNext={next} />;
+      return <EstructuraProductiva />;
     case 2:
       return <PersonaJuridica />;
     case 3:
@@ -39,15 +43,11 @@ function getStepContent(step, next) {
 }
 
 export default function Formulario() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const { activeStep, updateStepsLength, formSolicitante } = useFormContext();
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  useEffect(() => {
+    updateStepsLength(steps)
+  }, [steps])
 
   return (
     <React.Fragment>
@@ -63,7 +63,7 @@ export default function Formulario() {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-
+            Copeform
           </Typography>
         </Toolbar>
       </AppBar>
@@ -75,7 +75,17 @@ export default function Formulario() {
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
             {steps.map((label, index) => (
               <Step key={label} sx={{ flex: '1' }}>
-                <StepLabel>{label}</StepLabel>
+                <StepLabel
+                  icon={
+                    index === 3 ? (
+                      formSolicitante.isEncargadoDeCompra ? '4' : <CancelIcon />
+                    ) : (
+                      index + 1
+                    )
+                  }
+                >
+                  {label}
+                </StepLabel>
               </Step>
             ))}
           </Stepper>
@@ -91,22 +101,9 @@ export default function Formulario() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep, handleNext)}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Atras
-                  </Button>
-                )}
 
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === steps.length - 1 ? 'Enviar' : 'Continuar '}
-                </Button>
-              </Box>
+              {getStepContent(activeStep, steps.length)}
+
             </React.Fragment>
           )}
         </Paper>

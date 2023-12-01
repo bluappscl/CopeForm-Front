@@ -10,22 +10,28 @@ import { Box, Button } from '@mui/material';
 import { validate, clean, format, getCheckDigit } from 'rut.js'
 import axiosInstance from '../../../axiosInstance';
 import FormikSelect from '../../components/FormikSelect';
+import { useFormContext } from '../../context/FormContext';
+import StepController from '../../components/Formulario/StepController';
+import { useEffect } from 'react';
+import { handleFormMove } from '../../utils/formUtils';
 
 
 
-export default function Solicitante({ handleNext }) {
+export default function Solicitante() {
+  const { handleNext, formSolicitante, handleBack, clickedButton } = useFormContext();
+
   const regionOptions = [
     { value: 'region1', label: 'Región 1' },
     { value: 'region2', label: 'Región 2' },
     // ... otras regiones
   ];
-  
+
   const comunaOptions = [
     { value: 'comuna1', label: 'Comuna 1' },
     { value: 'comuna2', label: 'Comuna 2' },
     // ... otras comunas
   ];
-  
+
 
   const validationSchema = Yup.object({
     rut: Yup.string()
@@ -37,8 +43,8 @@ export default function Solicitante({ handleNext }) {
       }),
     razonSocial: Yup.string().required('Requerido'),
     telefono: Yup.string()
-    .required('Requerido')
-    .matches(/^(?:\+569|9)\d{7}$/, 'Ingrese un número de teléfono válido'),
+      .required('Requerido')
+      .matches(/^(?:\+569|9)\d{8}$/, 'Ingrese un número de teléfono válido'),
     mail: Yup.string().email('Correo electrónico inválido').required('Requerido'),
     region: Yup.string().required('Requerido'),
     comuna: Yup.string().required('Requerido'),
@@ -62,28 +68,11 @@ export default function Solicitante({ handleNext }) {
       giro: '',
       isEncargadoDeCompra: false,
       cupo: '',
+      ...formSolicitante,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-
-      try {
-
-        // values.giro = parseInt(values.giro);
-        values.cupo = parseInt(values.cupo);
-        console.log(values);
-        const response = await axiosInstance.post('/forms/create', values);
-        if (response.status === 201) {
-          console.log('Formulario enviado exitosamente');
-          // Llamar a la función handleNext después de enviar el formulario
-          handleNext();
-        } else {
-          console.error('Error al enviar el formulario:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error al enviar el formulario:', error.message);
-      }
-      console.log("Formulario enviado:", values);
-
+      handleFormMove(clickedButton, handleBack, handleNext, values)
     },
   });
 
@@ -244,7 +233,7 @@ export default function Solicitante({ handleNext }) {
           />
         </Grid>
       </Grid>
-      <button type='submit'>enviardium</button>
+      <StepController />
     </form>
   );
 }
