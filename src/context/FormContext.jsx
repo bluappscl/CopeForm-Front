@@ -1,6 +1,5 @@
-import { Formik } from 'formik';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { validate, clean, format, getCheckDigit } from 'rut.js'
+import { format } from 'rut.js'
 
 const FormContext = createContext();
 
@@ -31,11 +30,9 @@ export const FormProvider = ({ children }) => {
         updateFormEstructuraProductiva(values);
         break;
       case 2:
-        console.log("step2");
         updateFormPersonaJuridica(values);
         break;
       case 3:
-        console.log("wena comparitooo22");
         updateFormEncargadoDeCompra(values);
         break;
       case 4:
@@ -53,18 +50,17 @@ export const FormProvider = ({ children }) => {
   const handleNext = (values) => {
     updateByPosition(values);
     setActiveStep(
-      // (formSolicitante.isEncargadoDeCompra === false && activeStep === 2) ?
-        // activeStep + 2 :
+      (formSolicitante.isEncargadoDeCompra === false && activeStep === 2) ?
+        activeStep + 2 :
         activeStep + 1
     );
   };
 
   const handleBack = (values) => {
     updateByPosition(values);
-
     setActiveStep(
-      // (formSolicitante.isEncargadoDeCompra === false && activeStep === 4) ?
-        // activeStep - 2 :
+      (formSolicitante.isEncargadoDeCompra === false && activeStep === 4) ?
+        activeStep - 2 :
         activeStep - 1
     );
   };
@@ -138,7 +134,7 @@ export const FormProvider = ({ children }) => {
   }, [clickedButton]);
 
   return (
-    <FormContext.Provider value={{ formSolicitante, formEstructuraProductiva, formPersonaJuridica, formEncargadoDeCompra, updateFormSolicitante, activeStep, handleBack, handleNext, updateStepsLength, stepsLength, clickedButton, handleButtonClick }}>
+    <FormContext.Provider value={{ formSolicitante, formEstructuraProductiva, formPersonaJuridica, formEncargadoDeCompra, formArchivos, updateFormArchivos, activeStep, handleBack, handleNext, updateStepsLength, stepsLength, clickedButton, handleButtonClick }}>
       {children}
     </FormContext.Provider>
   );

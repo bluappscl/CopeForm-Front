@@ -8,10 +8,18 @@ import { useFormContext } from '../../context/FormContext';
 import StepController from '../../components/Formulario/StepController';
 import { useFormik } from 'formik';
 import { handleFormMove } from '../../utils/formUtils';
+import FormikSelect from '../../components/FormikSelect';
 
 export default function EncargadoDeCompra() {
 
     const { handleNext, formEncargadoDeCompra, handleBack, clickedButton } = useFormContext();
+
+    const tipoEncargado = [
+        { value: 1, label: 'sector predominante 1' },
+        { value: 2, label: 'sector predominante 2' },
+        { value: 3, label: 'sector predominante 3' },
+      ];
+      
 
     const validationSchema = Yup.object({
         tipoEncargado: Yup.string().required('Campo requerido'),
@@ -23,6 +31,7 @@ export default function EncargadoDeCompra() {
 
     const formik = useFormik({
         initialValues: {
+            tipoEncargado: '',
             rut: '',
             fullname: '',
             phone: 'a',
@@ -44,7 +53,15 @@ export default function EncargadoDeCompra() {
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
-                        <BasicSelect label={"Tipo de Encargado"} />
+                        <FormikSelect
+                            label="Tipo de Encargado"
+                            name="tipoEncargado"
+                            value={formik.values.tipoEncargado}
+                            onChange={(e) => formik.setFieldValue("tipoEncargado", e.target.value)}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.tipoEncargado && Boolean(formik.errors.tipoEncargado)}
+                            options={tipoEncargado}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField

@@ -10,7 +10,7 @@ import { handleFormMove } from '../../utils/formUtils';
 
 const PersonaJuridica = () => {
 
-  const { clickedButton, handleBack, handleNext, formPersonaJuridica } = useFormContext();
+  const { clickedButton, handleBack, handleNext, formPersonaJuridica,  } = useFormContext();
 
   const validationSchema = Yup.object({
     rut: Yup.string().required('Requerido'),
@@ -50,6 +50,7 @@ const PersonaJuridica = () => {
         </Button>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, mt: 4 }} alignItems="center">
+        <Typography>Index</Typography>
         <TextField
           required
           id="rut"
@@ -91,6 +92,7 @@ const PersonaJuridica = () => {
         </IconButton>
       </Box>
       <StepController />
+      <Button onClick={() => printFiles()}>AAA</Button>
     </form>
   );
 };
