@@ -49,6 +49,9 @@ export default function EstructuraProductiva() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedEspecies, setSelectedEspecies] = useState(null);
 
+  const printSelectedEspecies = () => {
+    console.log(selectedEspecies);
+  }
 
   useEffect(() => {
     console.log('Updated selectedEspecies:', selectedEspecies);
@@ -190,7 +193,7 @@ export default function EstructuraProductiva() {
                 </Box>
               </Grid>
             </Grid>
-            <Button type='submit' variant='outlined'>Enviar</Button>
+            <Button onClick={printSelectedEspecies} variant='outlined'>Enviar</Button>
             <StepController />
           </form>
         </AccordionDetails>

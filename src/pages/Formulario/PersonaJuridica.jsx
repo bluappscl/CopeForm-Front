@@ -92,7 +92,6 @@ const PersonaJuridica = () => {
         </IconButton>
       </Box>
       <StepController />
-      <Button onClick={() => printFiles()}>AAA</Button>
     </form>
   );
 };

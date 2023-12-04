@@ -133,8 +133,24 @@ export const FormProvider = ({ children }) => {
     console.log("Button Name: ", clickedButton);
   }, [clickedButton]);
 
+  const formState = {
+    formSolicitante,
+    formEstructuraProductiva,
+    formPersonaJuridica,
+    formEncargadoDeCompra,
+    formArchivos,
+    updateFormArchivos,
+    activeStep,
+    handleBack,
+    handleNext,
+    updateStepsLength,
+    stepsLength,
+    clickedButton,
+    handleButtonClick,
+  };
+  
   return (
-    <FormContext.Provider value={{ formSolicitante, formEstructuraProductiva, formPersonaJuridica, formEncargadoDeCompra, formArchivos, updateFormArchivos, activeStep, handleBack, handleNext, updateStepsLength, stepsLength, clickedButton, handleButtonClick }}>
+    <FormContext.Provider value={formState}>
       {children}
     </FormContext.Provider>
   );
