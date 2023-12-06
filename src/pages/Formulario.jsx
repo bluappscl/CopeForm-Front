@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Copyright from '../components/Copyright';
 import Solicitante from './Formulario/Solicitante';
 import EstructuraProductiva from '../pages/Formulario/EstructuraProductiva.jsx'
-import PersonaJuridica from './Formulario/PersonaJuridica';
+import PersonaJuridica from './Formulario/PersonaJuridica.jsx';
 import EncargadoDeCompra from './Formulario/EncargadoDeCompra';
 import Archivos from './Formulario/Archivos';
 import { useFormContext } from '../context/FormContext.jsx';
@@ -23,12 +23,14 @@ import StepController from '../components/Formulario/StepController.jsx';
 import { useEffect } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 
+
+
 const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <Solicitante />;
+      return <Solicitante/>;
     case 1:
       return <EstructuraProductiva />;
     case 2:
