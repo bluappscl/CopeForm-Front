@@ -22,6 +22,7 @@ import { useFormik } from 'formik';
 import StepController from '../components/Formulario/StepController.jsx';
 import { useEffect } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
+import EstructureList from './Formulario/EstructureList.jsx';
 
 
 
@@ -30,7 +31,7 @@ const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Enc
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <Solicitante/>;
+      return <EstructureList/>;
     case 1:
       return <EstructuraProductiva />;
     case 2:

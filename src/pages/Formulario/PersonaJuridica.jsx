@@ -71,7 +71,7 @@ const PersonaJuridica = () => {
                                             Agregar
                                         </Button>
                                     </Box>
-                                    {values.personas.map((estsructura, index) => (
+                                    {values.personas.map((persona, index) => (
                                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, mt: 4 }} alignItems="center" key={index}>
                                             <Field
                                                 name={`personas.${index}.rut`}
