@@ -15,11 +15,12 @@ const headerAlignProps = {
 
 const EspeciesCantidad2 = ({ index, returnEspecies }) => {
   const { especiesEstructura, updateEspeciesEstructura } = useFormContext();
-  const [especies, setEspecies] = useState(especiesEstructura[index] || []);
+  const especies = especiesEstructura[index] || []
 
+  //se usa para entregar el valor de especies al formulario en el componente padre
   useEffect(() => {
-    returnEspecies(especies);
-  }, [especiesEstructura]);
+    returnEspecies(especiesEstructura[index])
+  }, [especiesEstructura])
 
   const handleCantidadChange = (id, newValue) => {
     const parsedValue = parseInt(newValue, 10) || 0;
@@ -28,7 +29,6 @@ const EspeciesCantidad2 = ({ index, returnEspecies }) => {
       especie.id === id ? { ...especie, cantidad: parsedValue } : especie
     );
 
-    setEspecies(nuevoArray);
     updateEspeciesEstructura({ [index]: nuevoArray });
   };
 
