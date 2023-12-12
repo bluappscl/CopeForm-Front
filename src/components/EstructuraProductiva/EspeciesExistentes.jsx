@@ -5,32 +5,34 @@ import { orange } from '@mui/material/colors';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axiosInstance from '../../../axiosInstance';
 import { useEffect, useState } from 'react';
+import { useFormContext } from '../../context/FormContext';
 
-function EspeciesExistentes({ arrayIds, returnIdList }) {
+function EspeciesExistentes({ arrayIds, index }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [idList, setIdList] = useState([]);
+  const { especiesEstructura, updateEspeciesEstructura } = useFormContext();
 
   useEffect(() => {
     setIdList(arrayIds);
   }, [arrayIds]);
 
-  const addId = (id) => {
+  const addId = (id, nombre) => {
     setIdList((prevIdList) => {
-      if (prevIdList.includes(id) || arrayIds.includes(id)) {
+      if (prevIdList.some((item) => item.id === id) || arrayIds.some((item) => item.id === id)) {
         return prevIdList;
       } else {
-        const updatedIdList = [...prevIdList, id];
-        returnIdList(updatedIdList);
+        const updatedIdList = [...prevIdList, {id, nombre: nombre, cantidad: ''} ];
+        updateEspeciesEstructura({ [index]: updatedIdList });
+        // returnIdList(updatedIdList);
         return updatedIdList;
       }
     });
-  }
+  };
 
   useEffect(() => {
     axiosInstance.get("/especies/all")
       .then((response) => {
         const especies = response.data;
-
         const rows = especies.map((especie, index) => ({
           id: especie.id,
           especie: especie.nombre,  // Ajusta este campo según la estructura de tu objeto especie
@@ -39,7 +41,7 @@ function EspeciesExistentes({ arrayIds, returnIdList }) {
               backgroundColor: orange[600],
               '&:hover': { backgroundColor: orange[700] },
             }}
-              onClick={() => addId(especie.id)}
+              onClick={() => addId(especie.id, especie.nombre)}
             >
               <FileDownloadIcon />
             </IconButton>

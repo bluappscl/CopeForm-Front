@@ -7,6 +7,7 @@ import { grey, red } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../../axiosInstance';
+import { useFormContext } from '../../context/FormContext';
 
 function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
@@ -20,6 +21,7 @@ function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
 
   useEffect(() => {
     setIdList(arrayIds);
+    console.log("aaaa",idList)
   }, [arrayIds]);
 
   const removeId = (idToRemove) => {
@@ -50,7 +52,7 @@ function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
     if (arrayIds.length === 0) {
       setNoEspeciesSelected(true); // Informa que no hay especies seleccionadas
     } else {
-      axiosInstance.post("/especies/byIds", { ids: arrayIds })
+      axiosInstance.post("/especies/byIds", { ids: [1,2] })
         .then((response) => {
           setNoEspeciesSelected(false); // Reinicia el estado cuando se obtienen especies
           const especies = response.data;

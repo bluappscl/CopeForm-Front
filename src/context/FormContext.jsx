@@ -14,6 +14,7 @@ export const FormProvider = ({ children }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [clickedButton, setClickedButton] = useState(null);
 
+  const [especiesEstructura, setEspeciesEstructura] = useState([]);
 
   const updateStepsLength = (steps) => {
     setStepsLength(steps.length)
@@ -101,6 +102,13 @@ export const FormProvider = ({ children }) => {
     }));
   };
 
+  const updateEspeciesEstructura = (newData) => {
+    setEspeciesEstructura((prevData) => ({
+      ...prevData,
+      ...newData,
+    }));
+  };
+
   useEffect(() => {
     console.log("Solcitante: ", formSolicitante);
   }, [formSolicitante]);
@@ -147,8 +155,10 @@ export const FormProvider = ({ children }) => {
     stepsLength,
     clickedButton,
     handleButtonClick,
+    updateEspeciesEstructura,
+    especiesEstructura,
   };
-  
+
   return (
     <FormContext.Provider value={formState}>
       {children}

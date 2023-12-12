@@ -1,203 +1,211 @@
-import * as React from 'react';
-import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { Formik, Form, Field, FieldArray } from 'formik';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material';
 import * as Yup from 'yup';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton } from '@mui/material';
-import BasicSelect from '../../components/Select';
-import { orange } from '@mui/material/colors';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
-import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesExistentes';
-import { useState, useEffect } from 'react';
-import FormikSelect from '../../components/FormikSelect';
+import { orange, red } from '@mui/material/colors';
+import ClearIcon from '@mui/icons-material/Clear';
 import StepController from '../../components/Formulario/StepController';
 import { useFormContext } from '../../context/FormContext';
 import { handleFormMove } from '../../utils/formUtils';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesExistentes';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
+import EspeciesCantidad2 from '../../components/EstructuraProductiva/EspeciesCantidad2';
 
-const sectorPredominante = [
-  { value: 1, label: 'sector predominante 1' },
-  { value: 2, label: 'sector predominante 2' },
-  { value: 3, label: 'sector predominante 3' },
-];
-
-const tenenciaPredios = [
-  { value: 1, label: 'tenencia de predios 1' },
-  { value: 2, label: 'tenencia de predios 2' },
-];
-
-const comunaOptions = [
-  { value: 1, label: 'Comuna 1' },
-  { value: 2, label: 'Comuna 2' },
-  { value: 3, label: 'Comuna 3' },
-];
-
-const validationSchema = Yup.object({
-  sectorPredominante: Yup.string().required('Campo requerido'),
-  tenenciaPredios: Yup.string().required('Campo requerido'),
-  comuna: Yup.string().required('Campo requerido'),
-  rol: Yup.string().required('Campo requerido'),
-  principalesSocios: Yup.string().required('Campo requerido'),
+const validationSchema = Yup.object().shape({
+    personas: Yup.array().of(
+        Yup.object().shape({
+            rut: Yup.string().required('El Rut/Rep es requerido'),
+            participation: Yup.string().required('La Participación es requerida'),
+            phone: Yup.string().required('El Número telefónico es requerido'),
+        })
+    ),
 });
 
-export default function EstructuraProductiva() {
+const EstructuraProductiva = () => {
+    const { handleNext, handleBack, clickedButton, formEstructuraProductiva, especiesEstructura, updateEspeciesEstructura } = useFormContext();
 
-  const { handleBack, handleNext, clickedButton, formEstructuraProductiva } = useFormContext();
+    const prinIds = () => {
+        console.log(especiesEstructura);
+    }
 
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [selectedEspecies, setSelectedEspecies] = useState(null);
+    const initialValues = {
+        estructuras: (formEstructuraProductiva?.estructuras || []).map((estructura) => ({
+            ...estructura,
+        })),
+    };
 
-  const printSelectedEspecies = () => {
-    console.log(selectedEspecies);
-  }
+    // Si formEstructuraProductiva.estructuras está vacío, agrega una estructura vacía
+    if (!formEstructuraProductiva?.estructuras?.length) {
+        initialValues.estructuras.push({
+            // Propiedades de la estructura vacía
+            sectorPredominante: '',
+            tenenciaPredios: '',
+            comuna: '',
+            rol: '',
+            principalesSocios: '',
+        });
+    }
 
-  useEffect(() => {
-    console.log('Updated selectedEspecies:', selectedEspecies);
-  }, [selectedEspecies]);
+    return (
+        <>
+            <Formik
+                initialValues={initialValues}
+                // validationSchema={validationSchema}
+                onSubmit={(values) => {
+                    console.log(values)
+                    handleFormMove(clickedButton, handleBack, handleNext, values)
+                }}
+            >
+                {({ values, errors }) => (
+                    <Form>
+                        <FieldArray
+                            name="estructuras"
+                            render={(arrayHelpers) => (
+                                <>
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <Typography variant="h6" gutterBottom>
+                                            Estructura Productiva
+                                        </Typography>
+                                        <Button
+                                            type="button"
+                                            variant="contained"
+                                            sx={{
+                                                backgroundColor: orange[600],
+                                                '&:hover': { backgroundColor: orange[700] },
+                                                ml: 'auto',
+                                            }}
+                                            // disabled={arrayHelpers.form.values.personas.length === 10}
+                                            onClick={() => (
+                                                arrayHelpers.push({
+                                                    sectorPredominante: '',
+                                                    tenenciaPredios: '',
+                                                    comuna: '',
+                                                    rol: '',
+                                                    principalesSocios: '',
+                                                })
+                                            )}
+                                        >
+                                            Agregar
+                                        </Button>
+                                        <Button variant='outlined' onClick={() => prinIds()}>Imprimir Especies</Button>
+                                    </Box>
 
-  const formik = useFormik({
-    initialValues: {
-      sectorPredominante: '',
-      tenenciaPredios: '',
-      comuna: '',
-      rol: '',
-      principalesSocios: '',
-      ...formEstructuraProductiva,
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      handleFormMove(clickedButton, handleBack, handleNext, values);
-    },
-  });
 
+                                    {values.estructuras.map((estructura, index) => (
+                                        // console.log(estructura),
+                                        <Accordion defaultExpanded={index === 0} sx={{ mt: 2, py: 1 }} key={index}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="structure-content"
+                                                id="structure-n"
+                                            >
+                                                Estructura productiva {index + 1}
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: { xs: 'column', md: 'row' },
+                                                        gap: 2,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        spacing: 3,
+                                                    }}
+                                                >
+                                                    <Field
+                                                        name={`estructuras.${index}.sectorPredominante`}
+                                                        as={Select}
+                                                        label={"wena comparitoo"}
+                                                        fullWidth
+                                                        variant="standard"
+                                                    >
+                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="2">Comparito 2</MenuItem>
+                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                    </Field>
+                                                    <Field
+                                                        name={`estructuras.${index}.tenenciaPredios`}
+                                                        as={Select}
+                                                        label={"wena comparitoo"}
+                                                        fullWidth
+                                                        variant="standard"
+                                                    >
+                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="2">Comparito 2</MenuItem>
+                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                    </Field>
+                                                    <Field
+                                                        name={`estructuras.${index}.comuna`}
+                                                        as={Select}
+                                                        label={"wena comparitoo"}
+                                                        fullWidth
+                                                        variant="standard"
+                                                    >
+                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="2">Comparito 2</MenuItem>
+                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                    </Field>
+                                                </Box>
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12} md={6}>
+                                                        <Field
+                                                            name={`estructuras.${index}.rol`}
+                                                            as={TextField}
+                                                            label="Rol"
+                                                            fullWidth
+                                                            variant="standard"
+                                                            error={Boolean(errors.estructuras?.[index]?.rol)}
+                                                            helperText={errors.estructuras?.[index]?.rol}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={12}>
+                                                        <Field
+                                                            name={`estructuras.${index}.principalesSocios`}
+                                                            as={TextField}
+                                                            label="PrincipalesSocios"
+                                                            fullWidth
+                                                            multiline
+                                                            rows={6}
+                                                            error={Boolean(errors.estructuras?.[index]?.principalesSocios)}
+                                                            helperText={errors.estructuras?.[index]?.principalesSocios}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
 
-  return (
-    <React.Fragment>
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <Typography variant="h6" gutterBottom>
-          Estructura Productiva
-        </Typography>
-        <Button variant="contained" sx={{
-          backgroundColor: orange[600],
-          '&:hover': { backgroundColor: orange[700] },
-          ml: 'auto',
-        }}>
-          Agregar
-        </Button>
-      </Box>
-      <Accordion defaultExpanded={true} sx={{ mt: 2 }}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="structure-content"
-          id="structure-n"
-        >
-          Estructura productiva 1
-        </AccordionSummary>
-        <AccordionDetails>
-          <form onSubmit={formik.handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={12}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    gap: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <FormikSelect
-                    label="Sector Predominante"
-                    name="sectorPredominante"
-                    value={formik.values.sectorPredominante}
-                    onChange={(e) => formik.setFieldValue("sectorPredominante", e.target.value)}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.sectorPredominante && Boolean(formik.errors.sectorPredominante)}
-                    options={sectorPredominante}
-                  />
-                  <FormikSelect
-                    label="Tenencia de Predios"
-                    name="tenenciaPredios"
-                    value={formik.values.tenenciaPredios}
-                    onChange={(e) => formik.setFieldValue("tenenciaPredios", e.target.value)}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.tenenciaPredios && Boolean(formik.errors.tenenciaPredios)}
-                    options={tenenciaPredios}
-                  />
-                  <FormikSelect
-                    label="Comuna"
-                    name="comuna"
-                    value={formik.values.comuna}
-                    onChange={(e) => formik.setFieldValue("comuna", e.target.value)}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.comuna && Boolean(formik.errors.comuna)}
-                    options={comunaOptions}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  id="rol"
-                  name="rol"
-                  label="Rol"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.rol}
-                  onChange={formik.handleChange}
-                  error={formik.touched.rol && Boolean(formik.errors.rol)}
-                  helperText={formik.touched.rol && formik.errors.rol}
-                />
-              </Grid>
-              <Grid item xs={12} md={12}>
-                <TextField
-                  id="principalesSocios"
-                  name="principalesSocios"
-                  label="Principales Socios"
-                  fullWidth
-                  multiline
-                  rows={6}
-                  value={formik.values.principalesSocios}
-                  onChange={formik.handleChange}
-                  error={formik.touched.principalesSocios && Boolean(formik.errors.principalesSocios)}
-                  helperText={formik.touched.principalesSocios && formik.errors.principalesSocios}
-                />
-              </Grid>
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', mt: 3 }}>
+                                                    <EspeciesExistentes
+                                                        arrayIds={especiesEstructura[index] || []}
+                                                        index={index}
+                                                    />
 
-              <Grid item xs={12} md={12}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
-                  <EspeciesExistentes
-                    arrayIds={selectedIds}
-                    returnIdList={(idList) => {
-                      setSelectedIds(() => {
-                        return idList;
-                      });
-                    }}
-                  />
-                  <IconButton variant="contained" sx={{
-                    backgroundColor: orange[600],
-                    '&:hover': { backgroundColor: orange[700] },
-                  }}>
-                    <FileDownloadIcon />
-                  </IconButton>
-                  <EspeciesCantidad
-                    arrayIds={selectedIds}
-                    returnArrayIds={(idArrays) => {
-                      setSelectedIds(idArrays);
-                    }}
-                    returnEspecies={(especies) => {
-                      setSelectedEspecies(especies);
-                    }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-            <Button onClick={printSelectedEspecies} variant='outlined'>Enviar</Button>
-            <StepController />
-          </form>
-        </AccordionDetails>
-      </Accordion>
-    </React.Fragment>
-  );
-}
+                                                    <FileDownloadIcon />
+
+                                                    {/* <EspeciesCantidad
+                                                        arrayIds={selectedIds[index] || []}
+                                                        returnEspecies={(especies) => (estructura.especies = especies)}
+                                                        returnArrayIds={(idArrays) => handleIdsChange(index, idArrays)}
+
+                                                    /> */}
+
+                                                    <EspeciesCantidad2
+                                                        index={index}
+                                                        returnEspecies={(especies) => (estructura.especies = especies)}
+                                                    />
+                                                </Box>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    ))}
+                                    <StepController />
+                                </>
+                            )}
+                        />
+                    </Form>
+                )}
+            </Formik>
+        </>
+    );
+};
+
+export default EstructuraProductiva;
