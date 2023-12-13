@@ -10,8 +10,10 @@ import { useFormContext } from '../../context/FormContext';
 function EspeciesExistentes({ arrayIds, index }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [idList, setIdList] = useState([]);
-  const { especiesEstructura, updateEspeciesEstructura } = useFormContext();
+  const { especiesEstructura, updateEspeciesEstructura, updateFormEstructuraProductiva, formEstructuraProductiva } = useFormContext();
 
+
+  console.log("existentes: ", formEstructuraProductiva)
   useEffect(() => {
     setIdList(arrayIds);
   }, [arrayIds]);
@@ -21,7 +23,7 @@ function EspeciesExistentes({ arrayIds, index }) {
       if (prevIdList.some((item) => item.id === id) || arrayIds.some((item) => item.id === id)) {
         return prevIdList;
       } else {
-        const updatedIdList = [...prevIdList, {id, nombre: nombre, cantidad: ''} ];
+        const updatedIdList = [...prevIdList, { id, nombre: nombre, cantidad: '' }];
         updateEspeciesEstructura({ [index]: updatedIdList });
         // returnIdList(updatedIdList);
         return updatedIdList;

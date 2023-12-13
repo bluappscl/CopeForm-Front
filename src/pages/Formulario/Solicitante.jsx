@@ -50,7 +50,7 @@ export default function Solicitante() {
     comuna: Yup.string().required('Requerido'),
     calle: Yup.string().required('Requerido'),
     numeroDeCalle: Yup.string().required('Requerido'),
-    giro: Yup.number().required('Requerido'),
+    giro: Yup.string().required('Requerido'),
     isEncargadoDeCompra: Yup.boolean(),
     cupo: Yup.number().required('Requerido'),
   });

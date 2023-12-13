@@ -5,7 +5,19 @@ const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
   const [formSolicitante, setFormSolicitante] = useState({});
-  const [formEstructuraProductiva, setFormEstructuraProductiva] = useState({});
+  const [formEstructuraProductiva, setFormEstructuraProductiva] = useState({
+    estructuras: [
+      {
+        comuna: '',
+        especies: [
+        ],
+        principalesSocios: '',
+        rol: '',
+        sectorPredominante: '',
+        tenenciaPredios: '',
+      },
+    ],
+  });
   const [formPersonaJuridica, setFormPersonaJuridica] = useState({});
   const [formEncargadoDeCompra, setFormEncargadoDeCompra] = useState({});
   const [formArchivos, setFormArchivos] = useState({});
@@ -103,6 +115,7 @@ export const FormProvider = ({ children }) => {
   };
 
   const updateEspeciesEstructura = (newData) => {
+    console.log("newData dentro de contexto: ", newData)
     setEspeciesEstructura((prevData) => ({
       ...prevData,
       ...newData,

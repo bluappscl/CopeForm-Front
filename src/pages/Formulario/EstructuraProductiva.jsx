@@ -12,6 +12,8 @@ import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesEx
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
 import EspeciesCantidad2 from '../../components/EstructuraProductiva/EspeciesCantidad2';
+import EspeciesCantidad3 from '../../components/EstructuraProductiva/EspeciesCantidad copy';
+import EspeciesCantidad2copy from '../../components/EstructuraProductiva/EspeciesCantidad2 copy';
 
 const validationSchema = Yup.object().shape({
     personas: Yup.array().of(
@@ -27,9 +29,9 @@ const EstructuraProductiva = () => {
     const { handleNext, handleBack, clickedButton, formEstructuraProductiva, especiesEstructura, updateEspeciesEstructura } = useFormContext();
 
     const prinIds = () => {
-        console.log(especiesEstructura);
+        console.log(formEstructuraProductiva);
     }
-
+    // console.log("formEstructuraProductiva: ",formEstructuraProductiva.estructuras[0].especies);
     const initialValues = {
         estructuras: (formEstructuraProductiva?.estructuras || []).map((estructura) => ({
             ...estructura,
@@ -44,7 +46,7 @@ const EstructuraProductiva = () => {
             tenenciaPredios: '',
             comuna: '',
             rol: '',
-            principalesSocios: '',
+            principalesSocios: ''
         });
     }
 
@@ -52,7 +54,7 @@ const EstructuraProductiva = () => {
         <>
             <Formik
                 initialValues={initialValues}
-                // validationSchema={validationSchema}
+                validationSchema={validationSchema}
                 onSubmit={(values) => {
                     console.log(values)
                     handleFormMove(clickedButton, handleBack, handleNext, values)
@@ -84,6 +86,7 @@ const EstructuraProductiva = () => {
                                                     comuna: '',
                                                     rol: '',
                                                     principalesSocios: '',
+                                                    especies: '',
                                                 })
                                             )}
                                         >
@@ -120,10 +123,11 @@ const EstructuraProductiva = () => {
                                                         label={"wena comparitoo"}
                                                         fullWidth
                                                         variant="standard"
+                                                        placeholder="Select Sector"
                                                     >
                                                         <MenuItem value="1">Comparito 1</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
-                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                        <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
                                                     <Field
                                                         name={`estructuras.${index}.tenenciaPredios`}
@@ -134,7 +138,7 @@ const EstructuraProductiva = () => {
                                                     >
                                                         <MenuItem value="1">Comparito 1</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
-                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                        <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
                                                     <Field
                                                         name={`estructuras.${index}.comuna`}
@@ -145,7 +149,7 @@ const EstructuraProductiva = () => {
                                                     >
                                                         <MenuItem value="1">Comparito 1</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
-                                                        <MenuItem value="2">Compardium</MenuItem>
+                                                        <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
                                                 </Box>
                                                 <Grid container spacing={3}>
@@ -188,8 +192,16 @@ const EstructuraProductiva = () => {
                                                         returnArrayIds={(idArrays) => handleIdsChange(index, idArrays)}
 
                                                     /> */}
-
+{/* 
                                                     <EspeciesCantidad2
+                                                        index={index}
+                                                        returnEspecies={(especies) => (estructura.especies = especies)}
+                                                    /> */}
+
+                                                    {/* <EspeciesCantidad3 index={index} returnEspecies={(especies) => (estructura.especies = especies)} /> */}
+
+                                                    
+                                                    <EspeciesCantidad2copy
                                                         index={index}
                                                         returnEspecies={(especies) => (estructura.especies = especies)}
                                                     />
