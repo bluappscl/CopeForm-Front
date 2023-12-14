@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormContext } from '../../context/FormContext';
-import { Button, Typography } from '@mui/material';
+import { Button, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { red } from '@mui/material/colors';
@@ -34,6 +34,7 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
       const newData = { ...prevData, rows: updatedRows };
       console.log("updatedRows: ", updatedRows)
       updateEspeciesEstructura({ [index]: updatedRows });
+      console.log("ESPECIE ESTRUCTURA: ", especiesEstructura)
       returnEspecies(updatedRows);
       setNoEspeciesSelected(updatedRows.length === 0); // Update noEspeciesSelected state
       return newData;
@@ -123,7 +124,18 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
   return (
     <div style={{ height: 300, width: '100%' }}>
       {especiesEstructura.length === 0 || especiesEstructura[index]?.length === 0 ? (
-        <Typography>AAAA</Typography>
+        <Paper sx={{
+          display: 'flex',
+          width: '100%',
+          height: '300px',
+          alignContent: 'center',
+          justifyContent: 'center',
+        }}
+        >
+          <Typography variant='h4' sx={{ my: 'auto' }}>
+            Seleccione Especies
+          </Typography>
+        </Paper>
       ) : (
         <>
           <DataGrid

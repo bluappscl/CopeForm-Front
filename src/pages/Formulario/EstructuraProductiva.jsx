@@ -92,7 +92,7 @@ const EstructuraProductiva = () => {
                                         >
                                             Agregar
                                         </Button>
-                                        <Button variant='outlined' onClick={() => prinIds()}>Imprimir Especies</Button>
+                                        {/* <Button variant='outlined' onClick={() => prinIds()}>Imprimir Especies</Button> */}
                                     </Box>
 
 
@@ -125,7 +125,7 @@ const EstructuraProductiva = () => {
                                                         variant="standard"
                                                         placeholder="Select Sector"
                                                     >
-                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="1">Papas</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
@@ -136,7 +136,7 @@ const EstructuraProductiva = () => {
                                                         fullWidth
                                                         variant="standard"
                                                     >
-                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="1">Arrendado</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
@@ -147,7 +147,7 @@ const EstructuraProductiva = () => {
                                                         fullWidth
                                                         variant="standard"
                                                     >
-                                                        <MenuItem value="1">Comparito 1</MenuItem>
+                                                        <MenuItem value="1">Lolol</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>

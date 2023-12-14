@@ -126,7 +126,7 @@ export default function Archivos() {
           ))}
         </Grid>
         <StepController />
-        <Button onClick={() => printFiles()}>AAA</Button>
+        {/* <Button onClick={() => printFiles()}>AAA</Button> */}
       </form>
     </React.Fragment>
   );
