@@ -8,10 +8,11 @@ import EncargadoDeCompra from "../Formulario/EncargadoDeCompra";
 import Archivos from "../Formulario/Archivos";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArchivosLinks from "./ArchivosLinks";
+import { useFormContext } from "../../context/FormContext";
 
 export default function BackOffice() {
 
-    const elevation= 2;
+    const elevation = 2;
     const formData = {
         rut: "21.023.920-0",
         razonSocial: "GTY",

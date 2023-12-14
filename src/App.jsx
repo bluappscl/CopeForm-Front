@@ -10,7 +10,7 @@ export default function App() {
     return (
         <FormProvider>
             <Routes>
-                <Route path='/' element={
+                <Route path='/form' element={
                     <Formulario />
                 } />
 

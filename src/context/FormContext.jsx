@@ -4,6 +4,52 @@ import { format } from 'rut.js'
 const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
+
+  const [formApplication, setFormApplication] = useState({
+    rut: "",
+    razonSocial: "",
+    telefono: "",
+    mail: "",
+    region: "",
+    comuna: "",
+    calle: "",
+    numeroDeCalle: "",
+    giro: "",
+    isEncargadoDeCompra: null,
+    cupo: null,
+    estructuras: [
+      {
+        comuna: '',
+        especies: [
+        ],
+        principalesSocios: '',
+        rol: '',
+        sectorPredominante: '',
+        tenenciaPredios: '',
+      },
+    ],
+    personas: [
+      {
+        participation: "",
+        phone: "",
+        rut: "",
+      },
+      {
+        participation: "",
+        phone: "",
+        rut: "",
+      },
+    ],
+    encargadoCompra: [{
+      tipoEncargado: null,
+      rut: "",
+      fullname: "",
+      phone: "",
+      mail: ""
+    }]
+  }
+  );
+
   const [formSolicitante, setFormSolicitante] = useState({});
   const [formEstructuraProductiva, setFormEstructuraProductiva] = useState({
     estructuras: [
@@ -170,6 +216,7 @@ export const FormProvider = ({ children }) => {
     handleButtonClick,
     updateEspeciesEstructura,
     especiesEstructura,
+    formApplication,
   };
 
   return (
