@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-const PersonaJuridica = () => {
+const PersonaJuridica = ({ formData }) => {
     const { handleNext, handleBack, clickedButton, formPersonaJuridica } = useFormContext();
 
     return (
@@ -32,7 +32,8 @@ const PersonaJuridica = () => {
                             phone: '',
                         },
                     ],
-                    ...formPersonaJuridica
+                    ...formData,
+                    ...formPersonaJuridica,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
@@ -50,26 +51,28 @@ const PersonaJuridica = () => {
                                         <Typography variant="h6" gutterBottom>
                                             Persona
                                         </Typography>
-                                        <Button
-                                            type="button"
-                                            variant="contained"
-                                            sx={{
-                                                backgroundColor: orange[600],
-                                                '&:hover': { backgroundColor: orange[700] },
-                                                ml: 'auto',
-                                            }}
-                                            disabled={arrayHelpers.form.values.personas.length === 10}
-                                            onClick={() => (
-                                                arrayHelpers.push({
-                                                    rut: '',
-                                                    participation: '',
-                                                    phone: '',
-                                                }),
-                                                console.log(arrayHelpers.form.values.personas.length))
-                                            }
-                                        >
-                                            Agregar
-                                        </Button>
+                                        {!formData && (
+                                            <Button
+                                                type="button"
+                                                variant="contained"
+                                                sx={{
+                                                    backgroundColor: orange[600],
+                                                    '&:hover': { backgroundColor: orange[700] },
+                                                    ml: 'auto',
+                                                }}
+                                                disabled={arrayHelpers.form.values.personas.length === 10}
+                                                onClick={() => (
+                                                    arrayHelpers.push({
+                                                        rut: '',
+                                                        participation: '',
+                                                        phone: '',
+                                                    }),
+                                                    console.log(arrayHelpers.form.values.personas.length))
+                                                }
+                                            >
+                                                Agregar
+                                            </Button>
+                                        )}
                                     </Box>
                                     {values.personas.map((persona, index) => (
                                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, mt: 4 }} alignItems="center" key={index}>
@@ -100,19 +103,24 @@ const PersonaJuridica = () => {
                                                 error={Boolean(errors.personas?.[index]?.phone)}
                                                 helperText={errors.personas?.[index]?.phone}
                                             />
-                                            <IconButton
-                                                type="button"
-                                                onClick={() => arrayHelpers.remove(index)}
-                                                sx={{
-                                                    backgroundColor: red[600],
-                                                    '&:hover': { backgroundColor: red[700] },
-                                                }}
-                                            >
-                                                <ClearIcon fontSize="small" sx={{ color: 'white' }}></ClearIcon>
-                                            </IconButton>
+                                            {!formData && (
+
+                                                <IconButton
+                                                    type="button"
+                                                    onClick={() => arrayHelpers.remove(index)}
+                                                    sx={{
+                                                        backgroundColor: red[600],
+                                                        '&:hover': { backgroundColor: red[700] },
+                                                    }}
+                                                >
+                                                    <ClearIcon fontSize="small" sx={{ color: 'white' }}></ClearIcon>
+                                                </IconButton>
+                                            )}
                                         </Box>
                                     ))}
-                                    <StepController />
+                                    {!formData && (
+                                        <StepController />
+                                    )}
                                 </>
                             )}
                         />

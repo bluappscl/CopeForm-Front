@@ -17,7 +17,7 @@ import { handleFormMove } from '../../utils/formUtils';
 
 
 
-export default function Solicitante() {
+export default function Solicitante({ formData }) {
   const { handleNext, formSolicitante, handleBack, clickedButton } = useFormContext();
 
   const regionOptions = [
@@ -112,6 +112,7 @@ export default function Solicitante() {
       isEncargadoDeCompra: false,
       cupo: '',
       ...formSolicitante,
+      ...formData,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -276,7 +277,9 @@ export default function Solicitante() {
           />
         </Grid>
       </Grid>
-      <StepController />
+      {!formData && (
+        <StepController />
+      )}
     </form>
   );
 }

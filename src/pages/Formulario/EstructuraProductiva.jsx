@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-const EstructuraProductiva = () => {
+const EstructuraProductiva = ({ formData }) => {
     const { handleNext, handleBack, clickedButton, formEstructuraProductiva, especiesEstructura, updateEspeciesEstructura } = useFormContext();
 
     const prinIds = () => {
@@ -33,7 +33,7 @@ const EstructuraProductiva = () => {
     }
     // console.log("formEstructuraProductiva: ",formEstructuraProductiva.estructuras[0].especies);
     const initialValues = {
-        estructuras: (formEstructuraProductiva?.estructuras || []).map((estructura) => ({
+        estructuras: (formData?.estructuras || formEstructuraProductiva?.estructuras || []).map((estructura) => ({
             ...estructura,
         })),
     };
@@ -70,28 +70,30 @@ const EstructuraProductiva = () => {
                                         <Typography variant="h6" gutterBottom>
                                             Estructura Productiva
                                         </Typography>
-                                        <Button
-                                            type="button"
-                                            variant="contained"
-                                            sx={{
-                                                backgroundColor: orange[600],
-                                                '&:hover': { backgroundColor: orange[700] },
-                                                ml: 'auto',
-                                            }}
-                                            // disabled={arrayHelpers.form.values.personas.length === 10}
-                                            onClick={() => (
-                                                arrayHelpers.push({
-                                                    sectorPredominante: '',
-                                                    tenenciaPredios: '',
-                                                    comuna: '',
-                                                    rol: '',
-                                                    principalesSocios: '',
-                                                    especies: '',
-                                                })
-                                            )}
-                                        >
-                                            Agregar
-                                        </Button>
+                                        {!formData && (
+                                            <Button
+                                                type="button"
+                                                variant="contained"
+                                                sx={{
+                                                    backgroundColor: orange[600],
+                                                    '&:hover': { backgroundColor: orange[700] },
+                                                    ml: 'auto',
+                                                }}
+                                                // disabled={arrayHelpers.form.values.personas.length === 10}
+                                                onClick={() => (
+                                                    arrayHelpers.push({
+                                                        sectorPredominante: '',
+                                                        tenenciaPredios: '',
+                                                        comuna: '',
+                                                        rol: '',
+                                                        principalesSocios: '',
+                                                        especies: '',
+                                                    })
+                                                )}
+                                            >
+                                                Agregar
+                                            </Button>
+                                        )}
                                         {/* <Button variant='outlined' onClick={() => prinIds()}>Imprimir Especies</Button> */}
                                     </Box>
 
@@ -118,29 +120,35 @@ const EstructuraProductiva = () => {
                                                     }}
                                                 >
                                                     <Field
+                                                        placeholder="Select Sector"
                                                         name={`estructuras.${index}.sectorPredominante`}
                                                         as={Select}
                                                         label={"wena comparitoo"}
                                                         fullWidth
                                                         variant="standard"
-                                                        placeholder="Select Sector"
                                                     >
                                                         <MenuItem value="1">Papas</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
                                                     <Field
+                                                        placeholder="Select Sector"
                                                         name={`estructuras.${index}.tenenciaPredios`}
                                                         as={Select}
                                                         label={"wena comparitoo"}
                                                         fullWidth
                                                         variant="standard"
+                                                        displayEmpty
                                                     >
+                                                        <MenuItem value="" disabled>
+                                                            Select Sector
+                                                        </MenuItem>
                                                         <MenuItem value="1">Arrendado</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
                                                     <Field
+                                                        placeholder="Select Sector"
                                                         name={`estructuras.${index}.comuna`}
                                                         as={Select}
                                                         label={"wena comparitoo"}
@@ -192,7 +200,7 @@ const EstructuraProductiva = () => {
                                                         returnArrayIds={(idArrays) => handleIdsChange(index, idArrays)}
 
                                                     /> */}
-{/* 
+                                                    {/* 
                                                     <EspeciesCantidad2
                                                         index={index}
                                                         returnEspecies={(especies) => (estructura.especies = especies)}
@@ -200,7 +208,7 @@ const EstructuraProductiva = () => {
 
                                                     {/* <EspeciesCantidad3 index={index} returnEspecies={(especies) => (estructura.especies = especies)} /> */}
 
-                                                    
+
                                                     <EspeciesCantidad2copy
                                                         index={index}
                                                         returnEspecies={(especies) => (estructura.especies = especies)}
@@ -209,7 +217,9 @@ const EstructuraProductiva = () => {
                                             </AccordionDetails>
                                         </Accordion>
                                     ))}
-                                    <StepController />
+                                    {!formData && (
+                                        <StepController />
+                                    )}
                                 </>
                             )}
                         />
