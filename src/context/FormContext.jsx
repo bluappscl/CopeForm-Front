@@ -124,6 +124,12 @@ export const FormProvider = ({ children }) => {
     );
   };
 
+  const updateFormAplication = (newData) => {
+    setFormApplication((prevData) => ({
+      ...prevData,
+      ...newData,
+    }));
+  };
 
   const updateFormSolicitante = (newData) => {
     setFormSolicitante((prevData) => ({
@@ -167,6 +173,10 @@ export const FormProvider = ({ children }) => {
       ...newData,
     }));
   };
+
+  useEffect(() => {
+    console.log("Form Aplication: ", formApplication);
+  }, [formApplication]);
 
   useEffect(() => {
     console.log("Solcitante: ", formSolicitante);

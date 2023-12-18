@@ -62,22 +62,7 @@ export default function BackOffice() {
     return (
         <React.Fragment>
             <CssBaseline />
-            <AppBar
-                position="absolute"
-                color="default"
-                elevation={0}
-                sx={{
-                    position: 'relative',
-                    borderBottom: (t) => `1px solid ${t.palette.divider}`,
-                }}
-            >
-                <Toolbar>
-                    <Typography variant="h6" color="inherit" noWrap>
-                        Copeform
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 4, mt: 8 }}>
 
                 <Paper elevation={elevation} sx={{ mt: 4, p: 5 }}>
                     <Solicitante formData={formData} />

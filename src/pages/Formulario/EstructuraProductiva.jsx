@@ -163,6 +163,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12} md={6}>
                                                         <Field
+                                                            sx={{ mt: 2 }}
                                                             name={`estructuras.${index}.rol`}
                                                             as={TextField}
                                                             label="Rol"
