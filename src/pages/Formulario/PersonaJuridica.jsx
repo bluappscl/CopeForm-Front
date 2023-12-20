@@ -7,44 +7,68 @@ import ClearIcon from '@mui/icons-material/Clear';
 import StepController from '../../components/Formulario/StepController';
 import { useFormContext } from '../../context/FormContext';
 import { handleFormMove } from '../../utils/formUtils';
+import { useEffect } from 'react';
+import { format, validate } from 'rut.js';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const validationSchema = Yup.object().shape({
-    personas: Yup.array().of(
+    personasJuridicas: Yup.array().of(
         Yup.object().shape({
-            rut: Yup.string().required('El Rut/Rep es requerido'),
-            participation: Yup.string().required('La Participación es requerida'),
-            phone: Yup.string().required('El Número telefónico es requerido'),
+            rut: Yup.string()
+                .required('Requerido')
+                .test('is-valid-rut', 'Ingrese un RUT chileno válido', (value) => {
+                    const formatRut = format(value);
+                    return validate(formatRut);
+                }),
+            participacion: Yup.number().required('La Participación es requerida'),
+            telefono: Yup.string()
+                .required('Requerido')
+                .matches(/^(?:\+569|9)\d{8}$/, 'Ingrese un número de teléfono válido'),
         })
     ),
 });
 
 const PersonaJuridica = ({ formData }) => {
-    const { handleNext, handleBack, clickedButton, formPersonaJuridica } = useFormContext();
+    const { handleNext, handleBack, clickedButton, formApplication } = useFormContext();
+
 
     return (
         <>
             <Formik
                 initialValues={{
-                    personas: [
+                    personasJuridicas: [
                         {
                             rut: '',
-                            participation: '',
-                            phone: '',
+                            participacion: '',
+                            telefono: '',
+                            tipo: '',
                         },
                     ],
                     ...formData,
-                    ...formPersonaJuridica,
+                    ...formApplication,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    console.log(values)
+                    let participacionTotal = 0.0;
+                    values.personasJuridicas.map((persona) => {
+                        participacionTotal = participacionTotal + parseInt(persona.participacion);
+                        persona.rut = format(persona.rut)
+                    })
+                    if (participacionTotal > 100 || participacionTotal < 1) {
+                        console.log("participacionTotal: ", participacionTotal)
+
+                        alert("La participación total debe estar entre 0.01 y 0.1");
+                        return;
+                    }
+
+                    //HAY QUE ARREGLAR ESTA VALIDACION Y ANALIZAR POR QUE NO DUNCIONA.
                     handleFormMove(clickedButton, handleBack, handleNext, values)
                 }}
             >
                 {({ values, errors }) => (
                     <Form>
                         <FieldArray
-                            name="personas"
+                            name="personasJuridicas"
                             render={(arrayHelpers) => (
                                 <>
                                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -60,49 +84,55 @@ const PersonaJuridica = ({ formData }) => {
                                                     '&:hover': { backgroundColor: orange[700] },
                                                     ml: 'auto',
                                                 }}
-                                                disabled={arrayHelpers.form.values.personas.length === 10}
+                                                disabled={arrayHelpers.form.values.personasJuridicas.length === 10}
                                                 onClick={() => (
                                                     arrayHelpers.push({
                                                         rut: '',
-                                                        participation: '',
-                                                        phone: '',
-                                                    }),
-                                                    console.log(arrayHelpers.form.values.personas.length))
-                                                }
+                                                        participacion: '',
+                                                        telefono: '',
+                                                        tipo: '',
+                                                    })
+                                                )}
                                             >
                                                 Agregar
                                             </Button>
                                         )}
                                     </Box>
-                                    {values.personas.map((persona, index) => (
+                                    {values.personasJuridicas.map((persona, index) => (
                                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3, mt: 4 }} alignItems="center" key={index}>
                                             <Field
-                                                name={`personas.${index}.rut`}
+                                                name={`personasJuridicas.${index}.rut`}
                                                 as={TextField}
                                                 label="Rut/Rep"
                                                 fullWidth
                                                 variant="standard"
-                                                error={Boolean(errors.personas?.[index]?.rut)}
-                                                helperText={errors.personas?.[index]?.rut}
+                                                error={Boolean(errors.personasJuridicas?.[index]?.rut)}
+                                                helperText={errors.personasJuridicas?.[index]?.rut}
                                             />
                                             <Field
-                                                name={`personas.${index}.participation`}
+                                                name={`personasJuridicas.${index}.participacion`}
                                                 as={TextField}
                                                 label="Participacion"
                                                 fullWidth
                                                 variant="standard"
-                                                error={Boolean(errors.personas?.[index]?.participation)}
-                                                helperText={errors.personas?.[index]?.participation}
+                                                error={Boolean(errors.personasJuridicas?.[index]?.participacion)}
+                                                helperText={errors.personasJuridicas?.[index]?.participacion}
+                                                InputProps={{
+                                                    endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                                                }}
                                             />
                                             <Field
-                                                name={`personas.${index}.phone`}
+                                                name={`personasJuridicas.${index}.telefono`}
                                                 as={TextField}
                                                 label="Numero telefónico"
                                                 fullWidth
                                                 variant="standard"
-                                                error={Boolean(errors.personas?.[index]?.phone)}
-                                                helperText={errors.personas?.[index]?.phone}
+                                                error={Boolean(errors.personasJuridicas?.[index]?.telefono)}
+                                                helperText={errors.personasJuridicas?.[index]?.telefono}
                                             />
+
+
+
                                             {!formData && (
 
                                                 <IconButton

@@ -13,7 +13,7 @@ function EspeciesExistentes({ arrayIds, index }) {
   const { especiesEstructura, updateEspeciesEstructura, updateFormEstructuraProductiva, formEstructuraProductiva } = useFormContext();
 
 
-  console.log("existentes: ", formEstructuraProductiva)
+  // console.log("existentes: ", formEstructuraProductiva)
   useEffect(() => {
     setIdList(arrayIds);
   }, [arrayIds]);

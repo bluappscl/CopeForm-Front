@@ -1,42 +1,41 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
-import { Box, Button, TextField, Typography, Grid, Select, MenuItem } from '@mui/material';
+import { Formik, Field, FieldArray, Form } from 'formik';
+import { Box, Typography, Grid, Select, MenuItem, FormHelperText } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import * as Yup from 'yup';
-import { orange, red } from '@mui/material/colors';
-import ClearIcon from '@mui/icons-material/Clear';
 import StepController from '../../components/Formulario/StepController';
 import { useFormContext } from '../../context/FormContext';
 import { handleFormMove } from '../../utils/formUtils';
 
 const validationSchema = Yup.object().shape({
-    encargadoCompra: Yup.array().of(
+    encargadosDeCompra: Yup.array().of(
         Yup.object().shape({
             tipoEncargado: Yup.string().required('Campo requerido'),
             rut: Yup.string().required('Campo requerido'),
-            fullname: Yup.string().required('Campo requerido'),
-            phone: Yup.string().required('Campo requerido'),
-            mail: Yup.string().email('Correo electrónico no válido').required('Campo requerido'),
+            nombre: Yup.string().required('Campo requerido'),
+            telefono: Yup.string().required('Campo requerido'),
+            correo: Yup.string().email('Correo electrónico no válido').required('Campo requerido'),
         })
     ),
 });
 
 const EncargadoDeCompra = ({ formData }) => {
-    const { handleNext, handleBack, clickedButton, formEncargadoDeCompra } = useFormContext();
+    const { handleNext, handleBack, clickedButton, formApplication } = useFormContext();
 
     return (
         <Formik
             initialValues={{
-                encargadoCompra: [
+                encargadosDeCompra: [
                     {
                         tipoEncargado: '',
                         rut: '',
-                        fullname: '',
-                        phone: '',
-                        mail: '',
+                        nombre: '',
+                        telefono: '',
+                        correo: '',
                     },
                 ],
+                ...formApplication,
                 ...formData,
-                ...formEncargadoDeCompra,
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
@@ -51,75 +50,83 @@ const EncargadoDeCompra = ({ formData }) => {
                             Encargado de Compra
                         </Typography>
                     </Box>
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                name="encargadoCompra[0].tipoEncargado"
-                                as={Select}
-                                label="Tipo de Encargado"
-                                fullWidth
-                                variant="standard"
-                                error={Boolean(errors.encargadoCompra?.[0]?.tipoEncargado)}
-                                helperText={errors.encargadoCompra?.[0]?.tipoEncargado}
-                                displayEmpty
-                                sx={{ mt: 2 }}
-                            >
-                                <MenuItem value="" disabled>
-                                    Tipo de encargado
-                                </MenuItem>
-                                <MenuItem value={1}>
-                                    Valor 1
-                                </MenuItem>
-                            </Field>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                name="encargadoCompra[0].rut"
-                                as={TextField}
-                                label="Rut"
-                                fullWidth
-                                variant="standard"
-                                error={Boolean(errors.encargadoCompra?.[0]?.rut)}
-                                helperText={errors.encargadoCompra?.[0]?.rut}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                name="encargadoCompra[0].fullname"
-                                as={TextField}
-                                label="Nombre Completo"
-                                fullWidth
-                                variant="standard"
-                                error={Boolean(errors.encargadoCompra?.[0]?.fullname)}
-                                helperText={errors.encargadoCompra?.[0]?.fullname}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                name="encargadoCompra[0].phone"
-                                as={TextField}
-                                label="Numero Telefónico"
-                                fullWidth
-                                variant="standard"
-                                error={Boolean(errors.encargadoCompra?.[0]?.phone)}
-                                helperText={errors.encargadoCompra?.[0]?.phone}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                name="encargadoCompra[0].mail"
-                                as={TextField}
-                                label="Correo Electrónico"
-                                fullWidth
-                                variant="standard"
-                                error={Boolean(errors.encargadoCompra?.[0]?.mail)}
-                                helperText={errors.encargadoCompra?.[0]?.mail}
-                            />
-                        </Grid>
-                    </Grid>
-                    {!formData && (
-                        <StepController />
-                    )}
+                    <FieldArray
+                        name="encargadosDeCompra"
+                        render={(arrayHelpers) => (
+                            <Grid container spacing={3} alignItems="center">
+                                {values.encargadosDeCompra.map((encargado, index) => (
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                name={`encargadosDeCompra.${index}.tipoEncargado`}
+                                                as={Select}
+                                                label="Tipo de Encargado"
+                                                fullWidth
+                                                variant="standard"
+                                                error={Boolean(errors.encargadosDeCompra?.[index]?.tipoEncargado)}
+                                                displayEmpty
+                                                sx={{ mt: 2 }}
+                                            >
+                                                <MenuItem value="" disabled>
+                                                    Tipo de encargado
+                                                </MenuItem>
+                                                <MenuItem value={1}>Valor 1</MenuItem>
+                                                <MenuItem value={2}>Valor 2</MenuItem>
+                                            </Field>
+                                            <FormHelperText error={Boolean(errors.encargadosDeCompra?.[index]?.tipoEncargado)}>
+                                                {errors.encargadosDeCompra?.[index]?.tipoEncargado}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                name={`encargadosDeCompra.${index}.rut`}
+                                                as={TextField}
+                                                label="Rut"
+                                                fullWidth
+                                                variant="standard"
+                                                error={Boolean(errors.encargadosDeCompra?.[index]?.rut)}
+                                                helperText={errors.encargadosDeCompra?.[index]?.rut}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                name={`encargadosDeCompra.${index}.nombre`}
+                                                as={TextField}
+                                                label="Nombre Completo"
+                                                fullWidth
+                                                variant="standard"
+                                                error={Boolean(errors.encargadosDeCompra?.[index]?.nombre)}
+                                                helperText={errors.encargadosDeCompra?.[index]?.nombre}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                name={`encargadosDeCompra.${index}.telefono`}
+                                                as={TextField}
+                                                label="Numero Telefónico"
+                                                fullWidth
+                                                variant="standard"
+                                                error={Boolean(errors.encargadosDeCompra?.[index]?.telefono)}
+                                                helperText={errors.encargadosDeCompra?.[index]?.telefono}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                name={`encargadosDeCompra.${index}.correo`}
+                                                as={TextField}
+                                                label="Correo Electrónico"
+                                                fullWidth
+                                                variant="standard"
+                                                error={Boolean(errors.encargadosDeCompra?.[index]?.correo)}
+                                                helperText={errors.encargadosDeCompra?.[index]?.correo}
+                                            />
+                                        </Grid>
+                                    </React.Fragment>
+                                ))}
+                            </Grid>
+                        )}
+                    />
+                    {!formData && <StepController />}
                 </Form>
             )}
         </Formik>

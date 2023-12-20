@@ -14,8 +14,8 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import logo from '../assets/gty.svg'
-import { mainLinkItems } from './router/root';
 import { grey } from '@mui/material/colors';
+import { mainLinkItems } from '../router/root';
 
 
 

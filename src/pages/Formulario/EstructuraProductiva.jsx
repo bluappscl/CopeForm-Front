@@ -26,27 +26,24 @@ const validationSchema = Yup.object().shape({
 });
 
 const EstructuraProductiva = ({ formData }) => {
-    const { handleNext, handleBack, clickedButton, formEstructuraProductiva, especiesEstructura, updateEspeciesEstructura } = useFormContext();
+    const { handleNext, handleBack, clickedButton, especiesEstructura, formApplication } = useFormContext();
 
-    const prinIds = () => {
-        console.log(formEstructuraProductiva);
-    }
     // console.log("formEstructuraProductiva: ",formEstructuraProductiva.estructuras[0].especies);
     const initialValues = {
-        estructuras: (formData?.estructuras || formEstructuraProductiva?.estructuras || []).map((estructura) => ({
+        estructuras: (formData?.estructuras || formApplication?.estructuras || []).map((estructura) => ({
             ...estructura,
         })),
     };
 
     // Si formEstructuraProductiva.estructuras está vacío, agrega una estructura vacía
-    if (!formEstructuraProductiva?.estructuras?.length) {
+    if (!formApplication?.estructuras?.length) {
         initialValues.estructuras.push({
             // Propiedades de la estructura vacía
             sectorPredominante: '',
             tenenciaPredios: '',
             comuna: '',
             rol: '',
-            principalesSocios: ''
+            principalesClientes: ''
         });
     }
 
@@ -56,7 +53,6 @@ const EstructuraProductiva = ({ formData }) => {
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    console.log(values)
                     handleFormMove(clickedButton, handleBack, handleNext, values)
                 }}
             >
@@ -86,7 +82,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                         tenenciaPredios: '',
                                                         comuna: '',
                                                         rol: '',
-                                                        principalesSocios: '',
+                                                        principalesClientes: '',
                                                         especies: '',
                                                     })
                                                 )}
@@ -99,7 +95,6 @@ const EstructuraProductiva = ({ formData }) => {
 
 
                                     {values.estructuras.map((estructura, index) => (
-                                        // console.log(estructura),
                                         <Accordion defaultExpanded={index === 0} sx={{ mt: 2, py: 1 }} key={index}>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
@@ -126,7 +121,11 @@ const EstructuraProductiva = ({ formData }) => {
                                                         label={"wena comparitoo"}
                                                         fullWidth
                                                         variant="standard"
+                                                        displayEmpty
                                                     >
+                                                        <MenuItem value="" disabled>
+                                                            Sector predominante
+                                                        </MenuItem>
                                                         <MenuItem value="1">Papas</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
@@ -141,7 +140,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                         displayEmpty
                                                     >
                                                         <MenuItem value="" disabled>
-                                                            Select Sector
+                                                            Seleccione Sector
                                                         </MenuItem>
                                                         <MenuItem value="1">Arrendado</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
@@ -154,7 +153,11 @@ const EstructuraProductiva = ({ formData }) => {
                                                         label={"wena comparitoo"}
                                                         fullWidth
                                                         variant="standard"
+                                                        displayEmpty
                                                     >
+                                                        <MenuItem value="" disabled>
+                                                            Comuna
+                                                        </MenuItem>
                                                         <MenuItem value="1">Lolol</MenuItem>
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
@@ -170,19 +173,19 @@ const EstructuraProductiva = ({ formData }) => {
                                                             fullWidth
                                                             variant="standard"
                                                             error={Boolean(errors.estructuras?.[index]?.rol)}
-                                                            helperText={errors.estructuras?.[index]?.rol}
+                                                        // helperText={errors.estructuras?.[index]?.rol}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12} md={12}>
                                                         <Field
-                                                            name={`estructuras.${index}.principalesSocios`}
+                                                            name={`estructuras.${index}.principalesClientes`}
                                                             as={TextField}
-                                                            label="PrincipalesSocios"
+                                                            label="principalesClientes"
                                                             fullWidth
                                                             multiline
                                                             rows={6}
-                                                            error={Boolean(errors.estructuras?.[index]?.principalesSocios)}
-                                                            helperText={errors.estructuras?.[index]?.principalesSocios}
+                                                            error={Boolean(errors.estructuras?.[index]?.principalesClientes)}
+                                                        // helperText={errors.estructuras?.[index]?.principalesClientes}
                                                         />
                                                     </Grid>
                                                 </Grid>

@@ -6,67 +6,19 @@ const FormContext = createContext();
 export const FormProvider = ({ children }) => {
 
   const [formApplication, setFormApplication] = useState({
-    rut: "",
-    razonSocial: "",
-    telefono: "",
-    mail: "",
-    region: "",
-    comuna: "",
-    calle: "",
-    numeroDeCalle: "",
-    giro: "",
-    isEncargadoDeCompra: null,
-    cupo: null,
     estructuras: [
       {
         comuna: '',
         especies: [
         ],
-        principalesSocios: '',
+        principalesClientes: '',
         rol: '',
         sectorPredominante: '',
         tenenciaPredios: '',
       },
     ],
-    personas: [
-      {
-        participation: "",
-        phone: "",
-        rut: "",
-      },
-      {
-        participation: "",
-        phone: "",
-        rut: "",
-      },
-    ],
-    encargadoCompra: [{
-      tipoEncargado: null,
-      rut: "",
-      fullname: "",
-      phone: "",
-      mail: ""
-    }]
   }
   );
-
-  const [formSolicitante, setFormSolicitante] = useState({});
-  const [formEstructuraProductiva, setFormEstructuraProductiva] = useState({
-    estructuras: [
-      {
-        comuna: '',
-        especies: [
-        ],
-        principalesSocios: '',
-        rol: '',
-        sectorPredominante: '',
-        tenenciaPredios: '',
-      },
-    ],
-  });
-  const [formPersonaJuridica, setFormPersonaJuridica] = useState({});
-  const [formEncargadoDeCompra, setFormEncargadoDeCompra] = useState({});
-  const [formArchivos, setFormArchivos] = useState({});
 
   const [stepsLength, setStepsLength] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
@@ -83,19 +35,20 @@ export const FormProvider = ({ children }) => {
       case 0:
         values.cupo = parseInt(values.cupo);
         values.rut = format(values.rut);
-        updateFormSolicitante(values);
+        updateFormAplication(values);
         break;
       case 1:
-        updateFormEstructuraProductiva(values);
+        updateFormAplication(values);
         break;
       case 2:
-        updateFormPersonaJuridica(values);
+        console.log("VALUES: ", values.personas)
+        updateFormAplication(values);
         break;
       case 3:
-        updateFormEncargadoDeCompra(values);
+        updateFormAplication(values);
         break;
       case 4:
-        updateFormArchivos(values);
+        updateFormAplication(values);
         break;
       default:
         throw new Error('Unknown step');
@@ -109,7 +62,7 @@ export const FormProvider = ({ children }) => {
   const handleNext = (values) => {
     updateByPosition(values);
     setActiveStep(
-      (formSolicitante.isEncargadoDeCompra === false && activeStep === 2) ?
+      (formApplication.isEncargadoDeCompra === false && activeStep === 2) ?
         activeStep + 2 :
         activeStep + 1
     );
@@ -118,7 +71,7 @@ export const FormProvider = ({ children }) => {
   const handleBack = (values) => {
     updateByPosition(values);
     setActiveStep(
-      (formSolicitante.isEncargadoDeCompra === false && activeStep === 4) ?
+      (formApplication.isEncargadoDeCompra === false && activeStep === 4) ?
         activeStep - 2 :
         activeStep - 1
     );
@@ -126,41 +79,6 @@ export const FormProvider = ({ children }) => {
 
   const updateFormAplication = (newData) => {
     setFormApplication((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
-  };
-
-  const updateFormSolicitante = (newData) => {
-    setFormSolicitante((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
-  };
-
-  const updateFormEstructuraProductiva = (newData) => {
-    setFormEstructuraProductiva((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
-  };
-
-  const updateFormPersonaJuridica = (newData) => {
-    setFormPersonaJuridica((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
-  };
-
-  const updateFormEncargadoDeCompra = (newData) => {
-    setFormEncargadoDeCompra((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
-  };
-
-  const updateFormArchivos = (newData) => {
-    setFormArchivos((prevData) => ({
       ...prevData,
       ...newData,
     }));
@@ -179,26 +97,6 @@ export const FormProvider = ({ children }) => {
   }, [formApplication]);
 
   useEffect(() => {
-    console.log("Solcitante: ", formSolicitante);
-  }, [formSolicitante]);
-
-  useEffect(() => {
-    console.log("Estructura: ", formEstructuraProductiva);
-  }, [formEstructuraProductiva]);
-
-  useEffect(() => {
-    console.log("PersonaJuridica: ", formPersonaJuridica);
-  }, [formPersonaJuridica]);
-
-  useEffect(() => {
-    console.log("Encargado de Compra: ", formEncargadoDeCompra);
-  }, [formEncargadoDeCompra]);
-
-  useEffect(() => {
-    console.log("Archivos: ", formArchivos);
-  }, [formArchivos]);
-
-  useEffect(() => {
     console.log("Active step: ", activeStep);
   }, [activeStep]);
 
@@ -211,12 +109,6 @@ export const FormProvider = ({ children }) => {
   }, [clickedButton]);
 
   const formState = {
-    formSolicitante,
-    formEstructuraProductiva,
-    formPersonaJuridica,
-    formEncargadoDeCompra,
-    formArchivos,
-    updateFormArchivos,
     activeStep,
     handleBack,
     handleNext,
@@ -227,6 +119,8 @@ export const FormProvider = ({ children }) => {
     updateEspeciesEstructura,
     especiesEstructura,
     formApplication,
+    updateFormAplication,
+
   };
 
   return (

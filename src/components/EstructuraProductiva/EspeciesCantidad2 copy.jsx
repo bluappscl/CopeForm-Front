@@ -16,14 +16,14 @@ const headerAlignProps = {
 };
 
 const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
-  const { especiesEstructura, updateEspeciesEstructura, formEstructuraProductiva } = useFormContext();
+  const { especiesEstructura, updateEspeciesEstructura, formEstructuraProductiva, formApplication } = useFormContext();
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [noEspeciesSelected, setNoEspeciesSelected] = useState(false);
 
-  console.log(formEstructuraProductiva)
+  // console.log(formApplication)
 
   const printEspecies = () => {
-    const especies = formEstructuraProductiva
+    const especies = formApplication
     console.log("LENGTH ", especies.length)
   };
 
@@ -57,16 +57,17 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
 
   useEffect(() => {
     const especies = especiesEstructura[index] || [];
-    console.log("especies temporales: ", especies);
+    // console.log("especies temporales: ", especies);
 
-    const aa = formEstructuraProductiva.estructuras[index]?.especies;
-    console.log("DSIHFISD: ,", aa);
+    const aa = formApplication.estructuras[index]?.especies;
 
     const rows = especies.map((especie) => {
+      console.log(especie)
       const cantidad = aa ? aa.find((item) => item.id === especie.id)?.cantidad || " " : " ";
 
       return {
         id: especie.id,
+        especieId: especie.id,
         nombre: especie.nombre,
         cantidad: cantidad,
         accion: (
@@ -83,10 +84,9 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
       };
     });
 
-    console.log("ROWS ", rows);
 
     const columns = [
-      { field: 'id', headerName: 'ID', flex: 1, ...headerAlignProps },
+      { field: 'especieId', headerName: 'ID', flex: 1, ...headerAlignProps },
       { field: 'nombre', headerName: 'Especie', flex: 2, ...headerAlignProps },
       {
         field: 'cantidad',

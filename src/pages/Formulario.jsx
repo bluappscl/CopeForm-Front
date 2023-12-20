@@ -12,7 +12,6 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Copyright from '../components/Copyright';
-import Solicitante from './Formulario/Solicitante';
 import EstructuraProductiva from '../pages/Formulario/EstructuraProductiva.jsx'
 import PersonaJuridica from './Formulario/PersonaJuridica.jsx';
 import EncargadoDeCompra from './Formulario/EncargadoDeCompra';
@@ -22,7 +21,8 @@ import { useFormik } from 'formik';
 import StepController from '../components/Formulario/StepController.jsx';
 import { useEffect } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import axiosInstance from '../../axiosInstance.js';
+import Solicitante from './Formulario/Solicitante.jsx';
 
 
 const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
@@ -30,7 +30,7 @@ const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Enc
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <Solicitante/>;
+      return <Solicitante />;
     case 1:
       return <EstructuraProductiva />;
     case 2:
@@ -45,11 +45,26 @@ function getStepContent(step) {
 }
 
 export default function Formulario() {
-  const { activeStep, updateStepsLength, formSolicitante } = useFormContext();
+  const { activeStep, updateStepsLength, formApplication, stepsLength } = useFormContext();
 
   useEffect(() => {
     updateStepsLength(steps)
   }, [steps])
+
+  useEffect(() => {
+    if (activeStep === stepsLength) {
+      // SUBE EL FORMULARIO UNA VEZ LLEGA AL PASO FINAL
+      axiosInstance.post("forms/createNewFormFilled", formApplication)
+        .then((response) => {
+          const data = response.data;
+          console.log("EXECUTED: ", data);
+        })
+        .catch((error) => {
+          console.error("Error al enviar el formulario:", error);
+        });
+    }
+    console.log("TOUCHED")
+  }, [activeStep, stepsLength]);
 
   return (
     <React.Fragment>
@@ -80,7 +95,7 @@ export default function Formulario() {
                 <StepLabel
                   icon={
                     index === 3 ? (
-                      formSolicitante.isEncargadoDeCompra ? '4' : <CancelIcon />
+                      formApplication.isEncargadoDeCompra ? '4' : <CancelIcon />
                     ) : (
                       index + 1
                     )

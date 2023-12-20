@@ -25,7 +25,8 @@ const VisuallyHiddenInput = styled('input')({
 
 const validateSize = (value) => {
   return !value || value.size <= (1024 * 1024 * 10);
-}
+};
+
 const fileValidation = (fieldName) => {
   return Yup.mixed().test(
     'fileSize',
@@ -35,32 +36,28 @@ const fileValidation = (fieldName) => {
 };
 
 export default function Archivos() {
-
-
-
-  const { handleNext, handleBack, clickedButton, formArchivos } = useFormContext();
-
-
-  const printFiles = () => {
-    console.log(formArchivos);
-  }
+  const { handleNext, handleBack, clickedButton, formApplication } = useFormContext();
 
   const validationSchema = Yup.object({
-    carpetaTributaria: fileValidation('carpetaTributaria').required("Carpeta tributaria es obligatoria"),
-    balances: fileValidation('balances'),
-    contratoArriendos: fileValidation('contratoArriendos'),
-    mandatosPoderes: fileValidation('mandatosPoderes'),
-    otros: fileValidation('otros'),
+    archivos: Yup.object({
+      carpetaTributaria: fileValidation('carpetaTributaria').required("Carpeta tributaria es obligatoria"),
+      balances: fileValidation('balances'),
+      contratoArriendos: fileValidation('contratoArriendos'),
+      mandatosPoderes: fileValidation('mandatosPoderes'),
+      otros: fileValidation('otros'),
+    }),
   });
 
   const formik = useFormik({
     initialValues: {
-      carpetaTributaria: null,
-      balances: undefined,
-      contratoArriendos: undefined,
-      mandatosPoderes: undefined,
-      otros: undefined,
-      ...formArchivos
+      archivos: {
+        carpetaTributaria: null,
+        balances: undefined,
+        contratoArriendos: undefined,
+        mandatosPoderes: undefined,
+        otros: undefined,
+      },
+      ...formApplication,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -68,10 +65,8 @@ export default function Archivos() {
     }
   });
 
-  const selectedFileMessage = (fileName) => {
-    // const selectedFile = formik.values[fileName];
-    // ${selectedFile.type.split('/')[1]}
-    return formik.values[fileName]
+  const selectedFileMessage = (fieldName) => {
+    return formik.values.archivos[fieldName]
       ? `Archivo seleccionado`
       : ''
   };
@@ -113,20 +108,18 @@ export default function Archivos() {
                   name={fileButton.name}
                   type="file"
                   onChange={(event) => {
-                    console.log(event.currentTarget.files[0]);
-                    formik.setFieldValue(fileButton.name, event.currentTarget.files[0]);
+                    formik.setFieldValue(`archivos.${fileButton.name}`, event.currentTarget.files[0]);
                   }} />
                 Seleccionar Archivo
               </Button>
               {selectedFileMessage(fileButton.name)}
-              {formik.touched[fileButton.name] && formik.errors[fileButton.name] && (
-                <div style={{ color: 'red' }}>{formik.errors[fileButton.name]}</div>
+              {formik.touched[`archivos.${fileButton.name}`] && formik.errors[`archivos.${fileButton.name}`] && (
+                <div style={{ color: 'red' }}>{formik.errors[`archivos.${fileButton.name}`]}</div>
               )}
             </Grid>
           ))}
         </Grid>
         <StepController />
-        {/* <Button onClick={() => printFiles()}>AAA</Button> */}
       </form>
     </React.Fragment>
   );
