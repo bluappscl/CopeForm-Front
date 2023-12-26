@@ -1,0 +1,152 @@
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
+import { orange } from '@mui/material/colors';
+import { useFormContext } from '../../context/FormContext';
+import StepController from '../../components/Formulario/StepController';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+import { handleFormMove } from '../../utils/formUtils';
+import axiosInstance from '../../../axiosInstance';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
+const validateSize = (value) => {
+  return !value || value.size <= (1024 * 1024 * 10);
+};
+
+const fileValidation = (fieldName) => {
+  return Yup.mixed().test(
+    'fileSize',
+    `El archivo ${fieldName} debe ser menor a 10mb`,
+    validateSize
+  );
+};
+
+export default function Archivos2() {
+  const { handleNext, handleBack, clickedButton, formApplication } = useFormContext();
+
+  const validationSchema = Yup.object({
+    archivos: Yup.object({
+      carpetaTributaria: fileValidation('carpetaTributaria').required("Carpeta tributaria es obligatoria"),
+      balances: fileValidation('balances'),
+      contratoArriendos: fileValidation('contratoArriendos'),
+      mandatosPoderes: fileValidation('mandatosPoderes'),
+      otros: fileValidation('otros'),
+    }),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      archivos: {
+        carpetaTributaria: null,
+        balances: undefined,
+        contratoArriendos: undefined,
+        mandatosPoderes: undefined,
+        otros: undefined,
+      },
+      ...formApplication,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const formData = new FormData()
+
+      const addFileToFormData = (file, fieldName) => {
+        file && formData.append(fieldName, file) && console.log(`Archivo ${fieldName} agregado`);
+      };
+    
+      addFileToFormData(values.archivos.carpetaTributaria, 'carpetaTributaria');
+      addFileToFormData(values.archivos.balances, 'balances');
+      addFileToFormData(values.archivos.contratoArriendos, 'contratoArriendos');
+      addFileToFormData(values.archivos.mandatosPoderes, 'mandatosPoderes');
+      addFileToFormData(values.archivos.otros, 'otros');
+    
+      console.log(formData);
+    
+      axiosInstance.post('/upload', formData)
+        .then((response) => {
+          const data = response;
+        })
+        .catch((error) => {
+          console.error('Error al subir archivos:', error);
+        });
+    
+
+      // handleFormMove(clickedButton, handleBack, handleNext, values);
+    }
+  });
+
+  const selectedFileMessage = (fieldName) => {
+    return formik.values.archivos[fieldName]
+      ? `Archivo seleccionado`
+      : ''
+  };
+
+  const fileButtons = [
+    { label: 'Carpeta Tributaria*', name: 'carpetaTributaria' },
+    { label: 'Balances', name: 'balances' },
+    { label: 'Contratos Arriendos', name: 'contratoArriendos' },
+    { label: 'Mandatos Especial/Poderes', name: 'mandatosPoderes' },
+    { label: 'Otros', name: 'otros' },
+  ];
+
+
+  return (
+    <React.Fragment>
+      <form onSubmit={formik.handleSubmit}>
+        <Typography variant="h6" gutterBottom>
+          Archivos2
+        </Typography>
+
+        <Grid container spacing={3} justifyContent="center">
+          {fileButtons.map((fileButton, index) => (
+            <Grid item xs={12} sm={6} key={index}>
+              <Typography variant="subtitle1" align="center">
+                {fileButton.label}
+              </Typography>
+              <Button
+                component="label"
+                variant="contained"
+                sx={{
+                  backgroundColor: orange[600],
+                  '&:hover': { backgroundColor: orange[700] },
+                  mt: 1,
+                  width: '100%',
+                }}
+                startIcon={<CloudUploadIcon />}
+              >
+                <VisuallyHiddenInput
+                  id={fileButton.name}
+                  name={fileButton.name}
+                  type="file"
+                  onChange={(event) => {
+                    formik.setFieldValue(`archivos.${fileButton.name}`, event.currentTarget.files[0]);
+                  }} />
+                Seleccionar Archivo
+              </Button>
+              {selectedFileMessage(fileButton.name)}
+              {formik.touched[`archivos.${fileButton.name}`] && formik.errors[`archivos.${fileButton.name}`] && (
+                <div style={{ color: 'red' }}>{formik.errors[`archivos.${fileButton.name}`]}</div>
+              )}
+            </Grid>
+          ))}
+        </Grid>
+        <Button type='submit' variant='outlined'>Teste de endpoint</Button>
+        <StepController />
+      </form>
+    </React.Fragment>
+  );
+}

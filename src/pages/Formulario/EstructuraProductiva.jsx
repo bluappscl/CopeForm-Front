@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, FormHelperText, Grid, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material';
 import * as Yup from 'yup';
 import { orange, red } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -15,18 +15,27 @@ import EspeciesCantidad2 from '../../components/EstructuraProductiva/EspeciesCan
 import EspeciesCantidad3 from '../../components/EstructuraProductiva/EspeciesCantidad copy';
 import EspeciesCantidad2copy from '../../components/EstructuraProductiva/EspeciesCantidad2 copy';
 
-const validationSchema = Yup.object().shape({
-    personas: Yup.array().of(
-        Yup.object().shape({
-            rut: Yup.string().required('El Rut/Rep es requerido'),
-            participation: Yup.string().required('La Participación es requerida'),
-            phone: Yup.string().required('El Número telefónico es requerido'),
-        })
-    ),
-});
-
 const EstructuraProductiva = ({ formData }) => {
     const { handleNext, handleBack, clickedButton, especiesEstructura, formApplication } = useFormContext();
+
+
+    const validationSchema = Yup.object().shape({
+        estructuras: Yup.array().of(
+            Yup.object().shape({
+                sectorPredominante: Yup.string().required('Sector predominante es requerido'),
+                tenenciaPredios: Yup.string().required('Tenencia de predios es requerida'),
+                comuna: Yup.string().required('Comuna es requerida'),
+                rol: Yup.string().required('Rol es requerido'),
+                principalesClientes: Yup.string().required('Principales clientes es requerido'),
+                // Add more validations for other fields as needed
+                especies: Yup.array().of(
+                    Yup.object().shape({
+                        // Add validations for the fields in the especies array
+                    })
+                ),
+            })
+        ),
+    });
 
     // console.log("formEstructuraProductiva: ",formEstructuraProductiva.estructuras[0].especies);
     const initialValues = {
@@ -130,6 +139,10 @@ const EstructuraProductiva = ({ formData }) => {
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
+                                                    <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].sectorPredominante)}>
+                                                        {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].sectorPredominante}
+                                                    </FormHelperText>
+
                                                     <Field
                                                         placeholder="Select Sector"
                                                         name={`estructuras.${index}.tenenciaPredios`}
@@ -146,6 +159,10 @@ const EstructuraProductiva = ({ formData }) => {
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
+                                                    <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].tenenciaPredios)}>
+                                                        {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].tenenciaPredios}
+                                                    </FormHelperText>
+
                                                     <Field
                                                         placeholder="Select Sector"
                                                         name={`estructuras.${index}.comuna`}
@@ -162,6 +179,9 @@ const EstructuraProductiva = ({ formData }) => {
                                                         <MenuItem value="2">Comparito 2</MenuItem>
                                                         <MenuItem value="3">Compardium</MenuItem>
                                                     </Field>
+                                                    <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].comuna)}>
+                                                        {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].comuna}
+                                                    </FormHelperText>
                                                 </Box>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12} md={6}>
@@ -180,7 +200,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                         <Field
                                                             name={`estructuras.${index}.principalesClientes`}
                                                             as={TextField}
-                                                            label="principalesClientes"
+                                                            label="Principales Clientes"
                                                             fullWidth
                                                             multiline
                                                             rows={6}
@@ -217,6 +237,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                         index={index}
                                                         returnEspecies={(especies) => (estructura.especies = especies)}
                                                     />
+
                                                 </Box>
                                             </AccordionDetails>
                                         </Accordion>

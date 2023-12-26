@@ -189,54 +189,59 @@ export default function Solicitante({ formData }) {
             <Grid item xs={12} sm={6}>
               <Typography>Dirección Tributaria</Typography>
               <Box display={"flex"} flexDirection={{ xs: 'column', md: 'row' }} gap={3}>
-                <Field
-                  label={"Región"}
-                  name="region"
-                  value={values.region}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  as={Select}
-                  displayEmpty
-                  error={Boolean(errors.region)}
-                  fullWidth
-                  variant="standard"
-                >
-                  <MenuItem value="" disabled>
-                    Región
-                  </MenuItem>
-                  {regionOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    label={"Región"}
+                    name="region"
+                    value={values.region}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    as={Select}
+                    displayEmpty
+                    error={Boolean(errors.region)}
+                    fullWidth
+                    variant="standard"
+                  >
+                    <MenuItem value="" disabled>
+                      Región
                     </MenuItem>
-                  ))}
-                </Field>
-                <FormHelperText error={Boolean(errors.region)}>
-                  {errors.region}
-                </FormHelperText>
-                <Field
-                  label={"Comuna"}
-                  name="comuna"
-                  value={values.comuna}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  as={Select}
-                  displayEmpty
-                  error={Boolean(errors.comuna)}
-                  fullWidth
-                  variant="standard"
-                >
-                  <MenuItem value="" disabled>
-                    Comuna
-                  </MenuItem>
-                  {comunaOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                    {regionOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                  <FormHelperText error={Boolean(errors.region)}>
+                    {errors.region}
+                  </FormHelperText>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+
+                  <Field
+                    label={"Comuna"}
+                    name="comuna"
+                    value={values.comuna}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    as={Select}
+                    displayEmpty
+                    error={Boolean(errors.comuna)}
+                    fullWidth
+                    variant="standard"
+                  >
+                    <MenuItem value="" disabled>
+                      Comuna
                     </MenuItem>
-                  ))}
-                </Field>
-                <FormHelperText error={Boolean(errors.comuna)}>
-                  {errors.comuna}
-                </FormHelperText>
+                    {comunaOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                  <FormHelperText error={Boolean(errors.comuna)}>
+                    {errors.comuna}
+                  </FormHelperText>
+                </Grid>
               </Box>
             </Grid>
 

@@ -23,6 +23,7 @@ import { useEffect } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 import axiosInstance from '../../axiosInstance.js';
 import Solicitante from './Formulario/Solicitante.jsx';
+import { useState } from 'react';
 
 
 const steps = ['Solicitante', 'Estructura Productiva', 'Persona Jurídica', 'Encargado de Compra', 'Archivos'];
@@ -45,7 +46,33 @@ function getStepContent(step) {
 }
 
 export default function Formulario() {
-  const { activeStep, updateStepsLength, formApplication, stepsLength } = useFormContext();
+  const { activeStep, updateStepsLength, formApplication, stepsLength, updateFormAplication } = useFormContext();
+
+  const [isIntention, setIsIntention] = useState(false)
+
+  const uploadFiles = (formId) => {
+    const formData = new FormData()
+    
+    const addFileToFormData = (file, fieldName) => {
+      file && formData.append(fieldName, file) && console.log(`Archivo ${fieldName} agregado`);
+    };
+
+    formData.append('formId', formId)
+
+    addFileToFormData(formApplication.archivos.carpetaTributaria, 'Carpeta Tributaria');
+    addFileToFormData(formApplication.archivos.balances, 'Balances');
+    addFileToFormData(formApplication.archivos.contratoArriendos, 'Contrato Arriendos');
+    addFileToFormData(formApplication.archivos.mandatosPoderes, 'Mandatos Poderes');
+    addFileToFormData(formApplication.archivos.otros, 'Otros');
+
+    axiosInstance.post('/upload', formData)
+      .then((response) => {
+        const data = response;
+      })
+      .catch((error) => {
+        console.error('Error al subir archivos:', error);
+      });
+  }
 
   useEffect(() => {
     updateStepsLength(steps)
@@ -53,18 +80,35 @@ export default function Formulario() {
 
   useEffect(() => {
     if (activeStep === stepsLength) {
+
       // SUBE EL FORMULARIO UNA VEZ LLEGA AL PASO FINAL
-      axiosInstance.post("forms/createNewFormFilled", formApplication)
+      axiosInstance.put("forms/createNewFormFilled", formApplication)
         .then((response) => {
           const data = response.data;
-          console.log("EXECUTED: ", data);
+          console.log("EXECUTED: ", data.form);
+          console.log("formApplicationformApplicationformApplication " ,formApplication.id)
+          uploadFiles(data.form.id)
         })
         .catch((error) => {
           console.error("Error al enviar el formulario:", error);
         });
+
     }
-    console.log("TOUCHED")
+
+    if (activeStep === 1 && isIntention === false) {
+      axiosInstance.post("forms/create", formApplication)
+        .then((response) => {
+          const data = response.data;
+          updateFormAplication({ formId: data.id })
+          setIsIntention(true)
+        })
+        .catch((error) => {
+          console.error("Error al enviar el formulario:", error);
+        });
+
+    }
   }, [activeStep, stepsLength]);
+
 
   return (
     <React.Fragment>

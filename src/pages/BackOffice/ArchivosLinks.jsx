@@ -3,25 +3,18 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { orange } from '@mui/material/colors';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { useFormContext } from '../../context/FormContext';
-import StepController from '../../components/Formulario/StepController';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { styled } from '@mui/material/styles';
-import { handleFormMove } from '../../utils/formUtils';
+import { Link } from 'react-router-dom';
 
-
-export default function ArchivosLinks() {
+export default function ArchivosLinks({ archivos }) {
     const { handleNext, handleBack, clickedButton, formArchivos } = useFormContext();
 
-    const fileButtons = [
-        { label: 'Carpeta Tributaria*', name: 'carpetaTributaria' },
-        { label: 'Balances', name: 'balances' },
-        { label: 'Contratos Arriendos', name: 'contratoArriendos' },
-        { label: 'Mandatos Especial/Poderes', name: 'mandatosPoderes' },
-        { label: 'Otros', name: 'otros' },
-    ];
+    const handleDownload = (url) => {
+        // Agregar lógica para descargar el archivo desde la URL
+        console.log(`Descargando archivo desde: ${url}`);
+        // Puedes utilizar window.location.href o alguna librería de manejo de descargas
+    };
 
     return (
         <React.Fragment>
@@ -31,24 +24,27 @@ export default function ArchivosLinks() {
                 </Typography>
 
                 <Grid container spacing={3} justifyContent="center">
-                    {fileButtons.map((fileButton, index) => (
+                    {archivos.map((archivo, index) => (
                         <Grid item xs={12} sm={6} key={index}>
                             <Typography variant="subtitle1" align="center">
-                                {fileButton.label}
+                                {archivo.tipo}
                             </Typography>
-                            <Button
-                                component="label"
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: orange[600],
-                                    '&:hover': { backgroundColor: orange[700] },
-                                    mt: 1,
-                                    width: '100%',
-                                }}
-                                startIcon={<CloudUploadIcon />}
-                            >
-                                {fileButton.label} {/* Agregar el texto aquí */}
-                            </Button>
+                            <Link to={archivo.url}>
+
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: orange[600],
+                                        '&:hover': { backgroundColor: orange[700] },
+                                        mt: 1,
+                                        width: '100%',
+                                    }}
+                                    startIcon={<CloudDownloadIcon />}
+                                    // onClick={() => handleDownload(archivo.url)}
+                                >
+                                    Descargar
+                                </Button>
+                            </Link>
                         </Grid>
                     ))}
                 </Grid>

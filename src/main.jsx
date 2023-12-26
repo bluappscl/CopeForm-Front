@@ -8,13 +8,21 @@ import '@fontsource/roboto/700.css';
 
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from 'react-auth-kit';
 
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider
+      authType={"localstorage"}
+      authName={"_auth"}
+      cookieDomain={window.location.hostname}
+      cookieSecure={false}
+    >
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>,
 )

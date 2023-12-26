@@ -24,6 +24,7 @@ function EspeciesExistentes({ arrayIds, index }) {
         return prevIdList;
       } else {
         const updatedIdList = [...prevIdList, { id, nombre: nombre, cantidad: '' }];
+        console.log("updatedIdList ", updatedIdList)
         updateEspeciesEstructura({ [index]: updatedIdList });
         // returnIdList(updatedIdList);
         return updatedIdList;

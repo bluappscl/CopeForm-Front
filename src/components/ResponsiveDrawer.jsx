@@ -16,6 +16,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import logo from '../assets/gty.svg'
 import { grey } from '@mui/material/colors';
 import { mainLinkItems } from '../router/root';
+import { useSignOut } from 'react-auth-kit';
 
 
 
@@ -25,6 +26,12 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const navigate = useNavigate();
+  const signOut = useSignOut();
+
+  const logout = () => {
+    signOut();
+    navigate("/login");
+  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -70,16 +77,15 @@ function ResponsiveDrawer(props) {
           </IconButton>
 
           <Typography color={"black"}>
-            CLIENTE
+            USERNAME
           </Typography>
           <IconButton
+            onClick={logout}
             variant="h6"
             color="black"
             style={{ marginLeft: "auto" }}
           >
-            <Link to={'/login'}>
-              <LogoutIcon fontSize='large' />
-            </Link>
+            <LogoutIcon fontSize='large' />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -119,7 +125,7 @@ function ResponsiveDrawer(props) {
           }}
           PaperProps={{
             sx: {
-              backgroundColor: grey[800],
+              backgroundColor: "#1d1a39",
               color: grey[100],
               textDecoration: 'none',
             }

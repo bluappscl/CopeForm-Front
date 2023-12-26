@@ -41,13 +41,13 @@ export const FormProvider = ({ children }) => {
         updateFormAplication(values);
         break;
       case 2:
-        console.log("VALUES: ", values.personas)
         updateFormAplication(values);
         break;
       case 3:
         updateFormAplication(values);
         break;
       case 4:
+        console.log(values)
         updateFormAplication(values);
         break;
       default:

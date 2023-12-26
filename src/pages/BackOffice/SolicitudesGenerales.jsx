@@ -24,18 +24,7 @@ export default function SolicitudesGenerales() {
                     overflow: 'auto',
                 }}
             >
-
                 <Container maxWidth="x-lg" sx={{ mt: 10, mb: 4 }}>
-
-                    <Box display="flex">
-                        <Link to={"/newticket"} style={{ marginLeft: "auto" }}>
-                            <Button variant="contained" >
-                                <AddCircleOutlineIcon /> Crear Ticket
-                            </Button>
-                        </Link>
-                    </Box>
-
-
                     <Grid container spacing={4}>
                         <Grid item xs={12}>
                             <Typography component="h2" variant="h6" color="black" gutterBottom>Lista de Solicitudes</Typography>

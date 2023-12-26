@@ -11,6 +11,23 @@ import { Chip, IconButton } from '@mui/material';
 import { grey, orange, pink } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 
+const handleUpdateForm = (formId, estado) => {
+    console.log(formId)
+    // Check if the estado is equal to 2 before making the update
+    if (estado === "Sin Empezar") {
+        axiosInstance.put(`/forms/updateStateOfForm`, { formId: formId, estado: 3 })
+            .then((response) => {
+                const data = response.data;
+                console.log(data);
+                // You can add additional logic here if needed
+            })
+            .catch((error) => {
+                console.error(error);
+                // Handle error if necessary
+            });
+    }
+};
+
 const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
@@ -52,8 +69,11 @@ const columns = [
         width: 150,
         renderCell: (params) => (
             <Link to={`/detalle/${params.row.id}`} underline="none">
-                <IconButton sx={{backgroundColor:orange[700]}}>
-                    <SearchIcon fontSize="medium" sx={{color:grey[900]}} />
+                <IconButton
+                    sx={{ backgroundColor: orange[700] }}
+                    onClick={() => handleUpdateForm(params.row.id, params.row.estado)}
+                >
+                    <SearchIcon fontSize="medium" sx={{ color: grey[900] }} />
                 </IconButton>
             </Link>
         ),
@@ -83,7 +103,6 @@ export default function TablaSolicitudes() {
             .then((response) => {
                 const forms = response.data;
                 console.log(forms)
-
                 const fillRows = forms.map((form) => ({
                     ...form,
                     creadoEl: formatDate(form.creadoEl),

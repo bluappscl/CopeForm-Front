@@ -20,21 +20,18 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [noEspeciesSelected, setNoEspeciesSelected] = useState(false);
 
-  // console.log(formApplication)
-
-  const printEspecies = () => {
-    const especies = formApplication
-    console.log("LENGTH ", especies.length)
-  };
-
   const removeId = (idToRemove) => {
     setEspeciesData((prevData) => {
       console.log("prevData: ", prevData)
       const updatedRows = prevData.rows.filter((row) => row.id !== idToRemove);
       const newData = { ...prevData, rows: updatedRows };
+      console.log('new Data: ', newData)
       console.log("updatedRows: ", updatedRows)
+
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA: ", formApplication)
       updateEspeciesEstructura({ [index]: updatedRows });
       console.log("ESPECIE ESTRUCTURA: ", especiesEstructura)
+
       returnEspecies(updatedRows);
       setNoEspeciesSelected(updatedRows.length === 0); // Update noEspeciesSelected state
       return newData;
@@ -63,7 +60,7 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
 
     const rows = especies.map((especie) => {
       console.log(especie)
-      const cantidad = aa ? aa.find((item) => item.id === especie.id)?.cantidad || " " : " ";
+      const cantidad = aa ? aa.find((item) => item.id === especie.id)?.cantidad || "" : "";
 
       return {
         id: especie.id,
@@ -142,7 +139,7 @@ const EspeciesCantidad2copy = ({ index, returnEspecies }) => {
             {...especiesData}
             pageSize={5}
           />
-          {/* <Button variant='outlined' onClick={() => printEspecies()}>PRINT ESPECIES</Button> */}
+
         </>
       )}
     </div>
