@@ -11,9 +11,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesExistentes';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
-import EspeciesCantidad2 from '../../components/EstructuraProductiva/EspeciesCantidad2';
-import EspeciesCantidad3 from '../../components/EstructuraProductiva/EspeciesCantidad copy';
-import EspeciesCantidad2copy from '../../components/EstructuraProductiva/EspeciesCantidad2 copy';
+import EspeciesCantidadForBackOffice from '../../components/EstructuraProductiva/EspeciesCantidadForBackOffice';
 
 const EstructuraProductiva = ({ formData }) => {
     const { handleNext, handleBack, clickedButton, especiesEstructura, formApplication } = useFormContext();
@@ -27,12 +25,11 @@ const EstructuraProductiva = ({ formData }) => {
                 comuna: Yup.string().required('Comuna es requerida'),
                 rol: Yup.string().required('Rol es requerido'),
                 principalesClientes: Yup.string().required('Principales clientes es requerido'),
-                // Add more validations for other fields as needed
                 especies: Yup.array().of(
                     Yup.object().shape({
-                        // Add validations for the fields in the especies array
-                    })
-                ),
+                        cantidad: Yup.number().required('La cantidad es requerida').min(0, 'La cantidad no puede ser menor a cero'),
+                    }).required('Especies no puede estar vacío')
+                ).min(1, 'Al menos una especie debe ser seleccionada'), // Adjust the min value as needed
             })
         ),
     });
@@ -52,7 +49,8 @@ const EstructuraProductiva = ({ formData }) => {
             tenenciaPredios: '',
             comuna: '',
             rol: '',
-            principalesClientes: ''
+            principalesClientes: '',
+            especies: ''
         });
     }
 
@@ -211,32 +209,27 @@ const EstructuraProductiva = ({ formData }) => {
                                                 </Grid>
 
                                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', mt: 3 }}>
-                                                    <EspeciesExistentes
-                                                        arrayIds={especiesEstructura[index] || []}
-                                                        index={index}
-                                                    />
 
-                                                    <FileDownloadIcon />
+                                                    {!formData ? (
+                                                        <>
+                                                            <EspeciesExistentes
+                                                                arrayIds={especiesEstructura[index] || []}
+                                                                index={index}
+                                                            />
 
-                                                    {/* <EspeciesCantidad
-                                                        arrayIds={selectedIds[index] || []}
-                                                        returnEspecies={(especies) => (estructura.especies = especies)}
-                                                        returnArrayIds={(idArrays) => handleIdsChange(index, idArrays)}
+                                                            <FileDownloadIcon />
 
-                                                    /> */}
-                                                    {/* 
-                                                    <EspeciesCantidad2
-                                                        index={index}
-                                                        returnEspecies={(especies) => (estructura.especies = especies)}
-                                                    /> */}
+                                                            <EspeciesCantidad
+                                                                index={index}
+                                                                returnEspecies={(especies) => (estructura.especies = especies)}
+                                                            />
 
-                                                    {/* <EspeciesCantidad3 index={index} returnEspecies={(especies) => (estructura.especies = especies)} /> */}
+                                                        </>
+                                                    ) : (
+                                                        <EspeciesCantidadForBackOffice data={formData.estructuras[index].especiesEnEstructura} />
+                                                    )}
 
 
-                                                    <EspeciesCantidad2copy
-                                                        index={index}
-                                                        returnEspecies={(especies) => (estructura.especies = especies)}
-                                                    />
 
                                                 </Box>
                                             </AccordionDetails>

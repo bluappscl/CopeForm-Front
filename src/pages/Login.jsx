@@ -77,6 +77,7 @@ export default function Login() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            py: "25%", px: { lg: 10 }
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -91,7 +92,7 @@ export default function Login() {
               required
               fullWidth
               id="correo"
-              label="Email Address"
+              label="Correo Electrónico"
               name="correo"
               autoComplete="correo"
               autoFocus
@@ -105,8 +106,8 @@ export default function Login() {
               required
               fullWidth
               name="contrasena"
-              label="Password"
-              type="contrasena"
+              label="Contraseña"
+              type="password"
               id="contrasena"
               autoComplete="current-contrasena"
               value={formik.values.contrasena}
@@ -123,19 +124,6 @@ export default function Login() {
               Sign In
             </Button>
             {error && <Typography color="error">{error}</Typography>}
-            <Grid container>
-              <Grid item xs>
-                <Link to="/b" variant="body2">
-                  Forgot contrasena?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <br />
             <Copyright />
           </Box>
         </Box>

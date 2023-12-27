@@ -29,6 +29,7 @@ export default function SolicitudesGenerales() {
                         <Grid item xs={12}>
                             <Typography component="h2" variant="h6" color="black" gutterBottom>Lista de Solicitudes</Typography>
                             <TablaSolicitudes />
+
                         </Grid>
                     </Grid>
                 </Container>

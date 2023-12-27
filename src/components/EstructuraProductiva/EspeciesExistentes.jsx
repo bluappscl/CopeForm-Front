@@ -10,17 +10,17 @@ import { useFormContext } from '../../context/FormContext';
 function EspeciesExistentes({ arrayIds, index }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [idList, setIdList] = useState([]);
-  const { especiesEstructura, updateEspeciesEstructura, updateFormEstructuraProductiva, formEstructuraProductiva } = useFormContext();
+  const { especiesEstructura, updateEspeciesEstructura } = useFormContext();
 
 
   // console.log("existentes: ", formEstructuraProductiva)
   useEffect(() => {
-    setIdList(arrayIds);
-  }, [arrayIds]);
+    setIdList(especiesEstructura[index] || []);
+  }, [especiesEstructura]);
 
   const addId = (id, nombre) => {
     setIdList((prevIdList) => {
-      if (prevIdList.some((item) => item.id === id) || arrayIds.some((item) => item.id === id)) {
+      if (prevIdList.some((item) => item.id === id) || idList.some((item) => item.id === id)) {
         return prevIdList;
       } else {
         const updatedIdList = [...prevIdList, { id, nombre: nombre, cantidad: '' }];

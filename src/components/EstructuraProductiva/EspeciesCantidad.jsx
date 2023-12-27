@@ -1,140 +1,131 @@
-import * as React from 'react';
+import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { Box, IconButton, Paper, Typography } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
-import ClearIcon from '@mui/icons-material/Clear';
-import { useEffect, useState } from 'react';
-import axiosInstance from '../../../axiosInstance';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormContext } from '../../context/FormContext';
+import { Button, Paper, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { red } from '@mui/material/colors';
+import ClearIcon from '@mui/icons-material/Clear';
 
-function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
+const headerAlignProps = {
+  headerAlign: 'center',
+  align: 'center',
+};
+
+const EspeciesCantidad = ({ index, returnEspecies }) => {
+  const { especiesEstructura, updateEspeciesEstructura, formApplication } = useFormContext();
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
-  const [idList, setIdList] = useState([]);
-  const [noEspeciesSelected, setNoEspeciesSelected] = useState(false); // Nuevo estado
-
-  const headerAlignProps = {
-    headerAlign: 'center',
-    align: 'center',
-  };
-
-  useEffect(() => {
-    setIdList(arrayIds);
-    console.log("aaaa",idList)
-  }, [arrayIds]);
 
   const removeId = (idToRemove) => {
-    setIdList((prevIdList) => {
-      const updatedIdList = prevIdList.filter((id) => id !== idToRemove);
-      if (updatedIdList.length === 0) {
-        setNoEspeciesSelected(true); // Informa que no hay especies seleccionadas
-        returnArrayIds(updatedIdList);
-      } else {
-        setNoEspeciesSelected(false); // Reinicia el estado cuando se selecciona una especie
-        returnArrayIds(updatedIdList);
-      }
-    });
-  };
-
-  const handleCantidadChange = (id, newValue) => {
     setEspeciesData((prevData) => {
-      const updatedRows = prevData.rows.map((row) =>
-        row.id === id ? { ...row, cantidad: newValue } : row
-      );
+      // console.log("prevData: ", prevData)
+      const updatedRows = prevData.rows.filter((row) => row.id !== idToRemove);
       const newData = { ...prevData, rows: updatedRows };
-      returnEspecies(newData.rows);
+
+      updateEspeciesEstructura({ [index]: updatedRows });
+      // console.log("ESPECIE ESTRUCTURA: ", especiesEstructura)
+
+      returnEspecies(updatedRows);
       return newData;
     });
   };
 
-  useEffect(() => {
-    if (arrayIds.length === 0) {
-      setNoEspeciesSelected(true); // Informa que no hay especies seleccionadas
-    } else {
-      axiosInstance.post("/especies/byIds", { ids: [1,2] })
-        .then((response) => {
-          setNoEspeciesSelected(false); // Reinicia el estado cuando se obtienen especies
-          const especies = response.data;
-
-          const existingRows = especiesData.rows.filter(row => arrayIds.includes(row.id));
-
-          const newRows = especies
-            .filter(especie => !especiesData.rows.some(row => row.id === especie.id))
-            .map((especie) => ({
-              id: especie.id,
-              especie: especie.nombre,
-              cantidad: "",
-              accion: (
-                <IconButton
-                  sx={{
-                    backgroundColor: red[600],
-                    '&:hover': { backgroundColor: red[700] },
-                  }}
-                  onClick={() => removeId(especie.id)}
-                >
-                  <ClearIcon fontSize='small' sx={{ color: "white" }}></ClearIcon>
-                </IconButton>
-              ),
-            }));
-
-          const updatedRows = [...existingRows, ...newRows];
-
-          const columns = [
-            { field: 'id', headerName: 'ID', flex: 1, ...headerAlignProps },
-            { field: 'especie', headerName: 'Especie', flex: 2, ...headerAlignProps },
-            {
-              field: 'cantidad',
-              headerName: 'Cantidad',
-              flex: 2,
-              ...headerAlignProps,
-              renderCell: (params) => (
-                <TextField
-                  type="number"
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  value={params.value}
-                  onChange={(e) => handleCantidadChange(params.id, e.target.value)}
-                />
-              ),
-            },
-            {
-              field: 'accion',
-              headerName: 'Acción',
-              flex: 1,
-              ...headerAlignProps,
-              renderCell: (params) => params.value,
-            },
-          ];
-
-          setEspeciesData({
-            rows: updatedRows,
-            columns,
-          });
-
-          // Llama a returnEspecies con los datos actualizados
+  const handleCantidadChange = (id, newValue) => {
+    // Validar que newValue sea un número antes de actualizar
+    if (!isNaN(newValue)) {
+      setEspeciesData((prevData) => {
+        const updatedRows = prevData.rows.map((row) =>
+          row.id === id ? { ...row, cantidad: newValue } : row
+        );
+        const newData = { ...prevData, rows: updatedRows };
+  
+        
+        // Agregar un retraso de 300 milisegundos (ajusta según sea necesario)
+        setTimeout(() => {
+          updateEspeciesEstructura({ [index]: updatedRows });
           returnEspecies(updatedRows);
-
-        })
-        .catch((error) => {
-          console.error('Error al obtener los datos de la API:', error);
-        });
+        }, 5);
+  
+        return newData;
+      });
     }
-  }, [arrayIds]);
-
-  const localizedTextsMap = {
-    columnMenuUnsort: "Desordenar",
-    columnMenuSortAsc: "Ordenar Ascendente",
-    columnMenuSortDesc: "Ordenar Descendente",
-    columnMenuFilter: "Filtrar",
-    columnMenuHideColumn: "Ocultar",
-    columnMenuShowColumns: "Mostrar Columnas",
   };
 
+  useEffect(() => {
+    const especies = especiesEstructura[index] || [];
+    console.log("especies temporales: ", especies);
+    
+    const aa = formApplication.estructuras[index]?.especies;
+    console.log("form app especies: ", aa);
+
+
+
+    const rows = especies.map((especie) => {
+      console.log(especie)
+      const cantidad = aa ? aa.find((item) => item.id === especie.id)?.cantidad || "" : "";
+
+      return {
+        id: especie.id,
+        especieId: especie.id,
+        nombre: especie.nombre,
+        cantidad: especie.cantidad,
+        accion: (
+          <IconButton
+            sx={{
+              backgroundColor: red[600],
+              '&:hover': { backgroundColor: red[700] },
+            }}
+            onClick={() => removeId(especie.id)}
+          >
+            <ClearIcon fontSize='small' sx={{ color: "white" }}></ClearIcon>
+          </IconButton>
+        ),
+      };
+    });
+
+
+    const columns = [
+      { field: 'especieId', headerName: 'ID', flex: 1, ...headerAlignProps },
+      { field: 'nombre', headerName: 'Especie', flex: 2, ...headerAlignProps },
+      {
+        field: 'cantidad',
+        headerName: 'Cantidad',
+        flex: 2,
+        ...headerAlignProps,
+        renderCell: (params) => (
+          <TextField
+            type="number"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={params.value}
+            onChange={(e) => handleCantidadChange(params.id, e.target.value)}
+          />
+        ),
+      },
+      {
+        field: 'accion',
+        headerName: 'Acción',
+        flex: 1,
+        ...headerAlignProps,
+        renderCell: (params) => params.value,
+      },
+    ];
+
+    setEspeciesData({
+      rows,
+      columns,
+    });
+
+    returnEspecies(rows);
+  }, [especiesEstructura[index]]);
+
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      {noEspeciesSelected ? (
+    <div style={{ height: 300, width: '100%' }}>
+      {especiesEstructura.length === 0 || especiesEstructura[index]?.length === 0 ? (
         <Paper sx={{
           display: 'flex',
           width: '100%',
@@ -148,10 +139,16 @@ function EspeciesCantidad({ arrayIds, returnArrayIds, returnEspecies }) {
           </Typography>
         </Paper>
       ) : (
-        <DataGrid {...especiesData} localeText={localizedTextsMap} />
+        <>
+          <DataGrid
+            {...especiesData}
+            pageSize={5}
+          />
+
+        </>
       )}
     </div>
   );
-}
+};
 
 export default EspeciesCantidad;

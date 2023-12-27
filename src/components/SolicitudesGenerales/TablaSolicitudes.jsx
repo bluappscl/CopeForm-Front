@@ -8,8 +8,9 @@ import { useEffect, useState } from 'react'; // Import useState
 import axiosInstance from '../../../axiosInstance';
 import SearchIcon from '@mui/icons-material/Search';
 import { Chip, IconButton } from '@mui/material';
-import { grey, orange, pink } from '@mui/material/colors';
+import { amber, blue, green, grey, indigo, orange, pink, red } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
+import { getColorForEstado } from '../../utils/formUtils';
 
 const handleUpdateForm = (formId, estado) => {
     console.log(formId)
@@ -28,40 +29,60 @@ const handleUpdateForm = (formId, estado) => {
     }
 };
 
+const headerAlignProps = {
+    headerAlign: 'center',
+    align: 'center',
+};
+
 const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'id', headerName: 'ID', width: 90, ...headerAlignProps },
     {
         field: 'creadoEl',
         headerName: 'Fecha de emision',
         width: 150,
+        ...headerAlignProps
     },
     {
         field: 'rut',
         headerName: 'Rut',
         width: 150,
+        ...headerAlignProps
     },
     {
         field: 'razonSocial',
         headerName: 'Razon Social',
         width: 150,
+        ...headerAlignProps
     },
     {
         field: 'comuna',
         headerName: 'Comuna',
         width: 110,
+        ...headerAlignProps
     },
     {
         field: 'cupo',
         headerName: 'Cupo',
         width: 160,
+        ...headerAlignProps
     },
     {
         field: 'estado',
         headerName: 'Estado',
         width: 160,
-        renderCell: (params) => (
-            <Chip label={params.row.estado} sx={{ backgroundColor: pink[500], color: 'white' }} />
-        )
+        renderCell: (params) => {
+            return (
+                <Chip
+                    label={params.row.estado}
+                    sx={{
+                        backgroundColor: getColorForEstado(params.row.estadoId) || '', // Puedes establecer un color predeterminado aquí
+                        color: 'white',
+                        width: '100px',
+                    }}
+                />
+            );
+        },
+        ...headerAlignProps
     },
     {
         field: 'action',
@@ -70,13 +91,19 @@ const columns = [
         renderCell: (params) => (
             <Link to={`/detalle/${params.row.id}`} underline="none">
                 <IconButton
-                    sx={{ backgroundColor: orange[700] }}
+                    sx={{
+                        backgroundColor: orange[600],
+                        '&:hover': {
+                            backgroundColor: orange[700], // Cambia el color al hacer hover
+                        },
+                    }}
                     onClick={() => handleUpdateForm(params.row.id, params.row.estado)}
                 >
                     <SearchIcon fontSize="medium" sx={{ color: grey[900] }} />
                 </IconButton>
             </Link>
         ),
+        ...headerAlignProps
     },
 ];
 
@@ -92,7 +119,9 @@ function formatDate(date) {
     return new Date(date).toLocaleDateString('es-ES', options);
 }
 
-
+const initialSortModel = [
+    { field: 'creadoEl', sort: 'desc' }, // 'desc' para orden descendente
+];
 
 export default function TablaSolicitudes() {
     const [rows, setRows] = useState([]); // Use state to manage rows
@@ -113,21 +142,12 @@ export default function TablaSolicitudes() {
     }, []);
 
     return (
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 800, width: '100%' }}>
             <DataGrid
                 rows={rows} // Use the updated rows state
                 columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 10,
-                        },
-                    },
-                }}
-                pageSizeOptions={[10]}
-                disableRowSelectionOnClick
-                autoPageSize
-
+                rowSelection={false}
+                sortModel={initialSortModel}
             />
         </Box>
     );

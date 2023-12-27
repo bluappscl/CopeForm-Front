@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Container, CssBaseline, Paper, Toolbar, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Button, Chip, Container, CssBaseline, Paper, Toolbar, Typography } from "@mui/material";
 import EstructuraProductiva from "../Formulario/EstructuraProductiva";
 import Solicitante from "../Formulario/Solicitante";
 import Copyright from "../../components/Copyright";
@@ -14,12 +14,25 @@ import axiosInstance from "../../../axiosInstance";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { blue, green, lightBlue, red } from "@mui/material/colors";
+import { getColorForEstado } from "../../utils/formUtils";
 
 export default function DetalleSolicitud() {
 
     const { id } = useParams();
     const [form, setForm] = useState(null);
     const [filesUrls, setFilesUrls] = useState(null);
+
+    const formatDate = (date) => {
+        const options = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        };
+
+        return new Date(date).toLocaleDateString('es-ES', options);
+    }
 
     useEffect(() => {
         axiosInstance.get(`/forms/${id}`)
@@ -34,13 +47,10 @@ export default function DetalleSolicitud() {
     }, []);
 
     const handleUpdateForm = (formId, estado) => {
-        console.log(formId)
         // Check if the estado is equal to 2 before making the update
         axiosInstance.put(`/forms/updateStateOfForm`, { formId: formId, estado: estado })
             .then((response) => {
                 const data = response.data;
-                console.log(data);
-                // You can add additional logic here if needed
             })
             .catch((error) => {
                 console.error(error);
@@ -71,8 +81,6 @@ export default function DetalleSolicitud() {
                     reverseButtons: true,
                 }).then((confirmResult) => {
                     if (confirmResult.isConfirmed) {
-                        // Lógica para Aprobar
-                        console.log('Solicitud Rechazada');
                         handleUpdateForm(form.id, 5)
                     }
                 });
@@ -88,9 +96,7 @@ export default function DetalleSolicitud() {
                     reverseButtons: true,
                 }).then((confirmResult) => {
                     if (confirmResult.isConfirmed) {
-                        // Lógica para Rechazar
                         handleUpdateForm(form.id, 4)
-                        console.log('Solicitud Aprobación');
                     }
                 });
             }
@@ -104,10 +110,20 @@ export default function DetalleSolicitud() {
             <CssBaseline />
             {form && (
                 <Container component="main" maxWidth="lg" sx={{ mb: 4, mt: 8 }}>
-                    <Paper>
-                        <Typography variant="h4">Solicitud {form.id}</Typography>
-                    </Paper>
-                    <Paper elevation={elevation} sx={{ mt: 4, p: 5 }}>
+                    <Box sx={{ display: 'flex', gap: 6 }}>
+                        <Typography variant="h5">Solicitud {form.id}</Typography>
+                        <Typography variant="h5">Creado el {formatDate(form.creadoEl)}</Typography>
+                        <Chip
+                            label={form.estado.nombre}
+                            sx={{
+                                backgroundColor: getColorForEstado(form.estadoId) || '', // Puedes establecer un color predeterminado aquí
+                                color: 'white',
+                                width: '100px',
+                            }}
+                        />
+
+                    </Box>
+                    <Paper elevation={elevation} sx={{ mt: 1, p: 5 }}>
                         <Solicitante formData={form} />
                     </Paper>
 
@@ -126,10 +142,18 @@ export default function DetalleSolicitud() {
                     <Paper elevation={elevation} sx={{ my: 4, p: 5 }}>
                         <ArchivosLinks archivos={filesUrls} />
                     </Paper>
-
-                    <Button variant="contained" color="primary" onClick={handleRevisarClick}>
-                        Revisar
-                    </Button>
+                    {form.estadoId === 3 && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            onClick={handleRevisarClick}
+                        // sx={{}}
+                        >
+                            Revisar
+                        </Button>
+                    )}
                     <Copyright />
                 </Container>
             )}

@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import logo from '../assets/gty.svg'
+import logo from '../assets/copelogo.svg'
 import { grey } from '@mui/material/colors';
 import { mainLinkItems } from '../router/root';
 import { useSignOut } from 'react-auth-kit';
@@ -40,7 +40,7 @@ function ResponsiveDrawer(props) {
   const drawer = (
     <div>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 3 }}>
-        <img src={logo} alt="Logo" style={{ width: '100%px', height: '80px' }} />
+        <img src={logo} alt="Logo" style={{ width: '100%', height: '100%' }} />
       </Box>
       <Divider />
       <List>
