@@ -53,6 +53,11 @@ const PersonaJuridica = ({ formData }) => {
                     values.personasJuridicas.map((persona) => {
                         participacionTotal = participacionTotal + parseInt(persona.participacion);
                         persona.rut = format(persona.rut)
+                        if ((parseInt(persona.rut.substring(0, 2), 10)) > 50) {
+                            persona.tipo = "Empresa"
+                        } else {
+                            persona.tipo = "Persona"
+                        }
                     })
                     if (participacionTotal > 100 || participacionTotal < 1) {
                         console.log("participacionTotal: ", participacionTotal)

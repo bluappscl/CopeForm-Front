@@ -6,14 +6,22 @@ import * as Yup from 'yup';
 import StepController from '../../components/Formulario/StepController';
 import { useFormContext } from '../../context/FormContext';
 import { handleFormMove } from '../../utils/formUtils';
+import { format, validate } from 'rut.js';
 
 const validationSchema = Yup.object().shape({
     encargadosDeCompra: Yup.array().of(
         Yup.object().shape({
             tipoEncargado: Yup.string().required('Campo requerido'),
-            rut: Yup.string().required('Campo requerido'),
+            rut: Yup.string()
+                .required('Requerido')
+                .test('is-valid-rut', 'Ingrese un RUT válido', (value) => {
+                    const formatRut = format(value);
+                    return validate(formatRut);
+                }),
             nombre: Yup.string().required('Campo requerido'),
-            telefono: Yup.string().required('Campo requerido'),
+            telefono: Yup.string()
+                .required('Requerido')
+                .matches(/^(?:\+569|9)\d{8}$/, 'Ingrese un número de teléfono válido'),
             correo: Yup.string().email('Correo electrónico no válido').required('Campo requerido'),
         })
     ),
@@ -40,6 +48,9 @@ const EncargadoDeCompra = ({ formData }) => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 console.log(values);
+                values.encargadosDeCompra.map((encargado) => {
+                    encargado.rut = format(encargado.rut)
+                })
                 handleFormMove(clickedButton, handleBack, handleNext, values);
             }}
         >

@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react'; // Import useState
 import axiosInstance from '../../../axiosInstance';
 import SearchIcon from '@mui/icons-material/Search';
-import { Chip, IconButton } from '@mui/material';
+import { Chip, IconButton, MenuItem, Select } from '@mui/material';
 import { amber, blue, green, grey, indigo, orange, pink, red } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import { getColorForEstado } from '../../utils/formUtils';
@@ -15,7 +15,7 @@ import { getColorForEstado } from '../../utils/formUtils';
 const handleUpdateForm = (formId, estado) => {
     console.log(formId)
     // Check if the estado is equal to 2 before making the update
-    if (estado === "Sin Empezar") {
+    if (estado === "No tratado") {
         axiosInstance.put(`/forms/updateStateOfForm`, { formId: formId, estado: 3 })
             .then((response) => {
                 const data = response.data;
@@ -125,10 +125,14 @@ const initialSortModel = [
 
 export default function TablaSolicitudes() {
     const [rows, setRows] = useState([]); // Use state to manage rows
+    const [selectedEstado, setSelectedEstado] = useState('');
 
+    const handleEstadoChange = (event) => {
+        setSelectedEstado(event.target.value);
+    };
 
     useEffect(() => {
-        axiosInstance.get("/forms/all")
+        axiosInstance.get(`/forms/all?estados=${selectedEstado}`)
             .then((response) => {
                 const forms = response.data;
                 console.log(forms)
@@ -139,12 +143,25 @@ export default function TablaSolicitudes() {
                 }))
                 setRows(fillRows);
             })
-    }, []);
+    }, [selectedEstado]);
 
     return (
-        <Box sx={{ height: 800, width: '100%' }}>
+        <Box sx={{ height: 800, width: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ marginLeft: 'auto' }}>
+                <Select value={selectedEstado} onChange={handleEstadoChange} displayEmpty sx={{width:'150px'}}>
+                    <MenuItem value="" disabled>
+                        Filtrar por Estado
+                    </MenuItem>
+                    <MenuItem value="">Todos</MenuItem>
+                    <MenuItem value="1">Intencion</MenuItem>
+                    <MenuItem value="2">Sin Empezar</MenuItem>
+                    <MenuItem value="3">En Revision</MenuItem>
+                    <MenuItem value="4">Aprobado</MenuItem>
+                    <MenuItem value="5">Rechazado</MenuItem>
+                </Select>
+            </Box>
             <DataGrid
-                rows={rows} // Use the updated rows state
+                rows={rows}
                 columns={columns}
                 rowSelection={false}
                 sortModel={initialSortModel}

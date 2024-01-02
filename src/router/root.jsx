@@ -14,12 +14,6 @@ const color = `${grey[200]}`
 
 export const mainLinkItems = () => (
   <nav>
-    <Link to={`/detalle/:id`} component={RouteLink} underline='none' color={'white'}>
-      <ListItemButton>
-        <DashboardIcon style={{ color: color }} sx={{ mx: 3, my: 1 }} />
-        Detalle
-      </ListItemButton>
-    </Link>
     <Link to={`/`} component={RouteLink} underline='none' color={'white'}>
       <ListItemButton>
         <DashboardIcon style={{ color: color }} sx={{ mx: 3, my: 1 }} />

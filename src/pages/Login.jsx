@@ -17,6 +17,7 @@ import Copyright from '../components/Copyright';
 import axiosInstance from '../../axiosInstance';
 import { useSignIn } from 'react-auth-kit';
 import { useState } from 'react';
+import { green } from '@mui/material/colors';
 
 export default function Login() {
   const signIn = useSignIn();
@@ -61,7 +62,7 @@ export default function Login() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+          backgroundImage: 'url(https://us.images.westend61.de/0001437099pw/green-wheat-field-at-summer-sunset-SMAF01961.jpg)',
           backgroundRepeat: 'no-repeat',
           backgroundColor: (t) =>
             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -80,11 +81,11 @@ export default function Login() {
             py: "25%", px: { lg: 10 }
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: green[500] }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Iniciar Sesion
           </Typography>
           <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
             <TextField

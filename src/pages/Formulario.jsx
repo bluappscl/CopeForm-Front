@@ -52,9 +52,9 @@ export default function Formulario() {
 
   const uploadFiles = (formId) => {
     const formData = new FormData()
-    
+
     const addFileToFormData = (file, fieldName) => {
-      file && formData.append(fieldName, file) && console.log(`Archivo ${fieldName} agregado`);
+      file && formData.append(fieldName, file);
     };
 
     formData.append('formId', formId)
@@ -85,8 +85,6 @@ export default function Formulario() {
       axiosInstance.put("forms/createNewFormFilled", formApplication)
         .then((response) => {
           const data = response.data;
-          console.log("EXECUTED: ", data.form);
-          console.log("formApplicationformApplicationformApplication " ,formApplication.id)
           uploadFiles(data.form.id)
         })
         .catch((error) => {
@@ -138,11 +136,10 @@ export default function Formulario() {
               <Step key={label} sx={{ flex: '1' }}>
                 <StepLabel
                   icon={
-                    index === 3 ? (
-                      formApplication.isEncargadoDeCompra ? '4' : <CancelIcon />
-                    ) : (
-                      index + 1
-                    )
+                    index === 2 && formApplication.tipo === 'Persona'
+                      ? <CancelIcon />
+                      : index === 3 ? (formApplication.isEncargadoDeCompra ? '4' : <CancelIcon />)
+                        : index + 1
                   }
                 >
                   {label}

@@ -12,67 +12,20 @@ import { useFormContext } from '../../context/FormContext';
 import StepController from '../../components/Formulario/StepController';
 import { useEffect } from 'react';
 import { handleFormMove } from '../../utils/formUtils';
-
-
+import { regionOptions, comunaOptions, regiones } from '../../utils/normalizedData';
 
 export default function Solicitante({ formData }) {
   const { handleNext, handleBack, clickedButton, formApplication } = useFormContext();
 
-  const regionOptions = [
-    { value: 'TARAPACA', label: 'Tarapacá' },
-    { value: 'ANTOFAGASTA', label: 'Antofagasta' },
-    { value: 'ATACAMA', label: 'Atacama' },
-    { value: 'COQUIMBO', label: 'Coquimbo' },
-    { value: 'VALPARAISO', label: 'Valparaíso' },
-    { value: 'LIB. GRAL. BDO. O\'HIGGINS', label: 'Libertador General Bernardo O\'Higgins' },
-    { value: 'MAULE', label: 'Maule' },
-    { value: 'BIOBIO', label: 'Biobío' },
-    { value: 'ARAUCANIA', label: 'La Araucanía' },
-    { value: 'LOS LAGOS', label: 'Los Lagos' },
-    { value: 'AYSEN Y DEL GRAL CARLOS IBANEZ', label: 'Aysén del General Carlos Ibáñez del Campo' },
-    { value: 'MAGALLANES Y LA ANTARTICA', label: 'Magallanes y de la Antártica Chilena' },
-    { value: 'METROPOLITANA', label: 'Metropolitana' },
-    { value: 'LOS RIOS', label: 'Los Ríos' },
-    { value: 'ARICA Y PARINACOTA', label: 'Arica y Parinacota' },
-    { value: 'NUBLE', label: 'Ñuble' },
-  ];
+  const handleRegionChange = (event) => {
+    const region = event.target.value;
+    handleChange(event); // Actualiza el estado del formulario
+    setFieldValue('region', region); // Asegúrate de tener setFieldValue disponible
 
-  const comunaOptions = [
-    { value: 'RANCAGUA', label: 'Rancagua' },
-    { value: 'CODEGUA', label: 'Codegua' },
-    { value: 'COINCO', label: 'Coinco' },
-    { value: 'COLTAUCO', label: 'Coltauco' },
-    { value: 'DOÑIHUE', label: 'Doñihue' },
-    { value: 'GRANEROS', label: 'Graneros' },
-    { value: 'LAS CABRAS', label: 'Las Cabras' },
-    { value: 'MACHALÍ', label: 'Machalí' },
-    { value: 'MALLOA', label: 'Malloa' },
-    { value: 'MOSTAZAL', label: 'Mostazal' },
-    { value: 'OLIVAR', label: 'Olivar' },
-    { value: 'PEUMO', label: 'Peumo' },
-    { value: 'PICHIDEGUA', label: 'Pichidegua' },
-    { value: 'QUINTA DE TILCOCO', label: 'Quinta de Tilcoco' },
-    { value: 'RENGO', label: 'Rengo' },
-    { value: 'REQUÍNOA', label: 'Requínoa' },
-    { value: 'SAN VICENTE', label: 'San Vicente' },
-    { value: 'PICHILEMU', label: 'Pichilemu' },
-    { value: 'LA ESTRELLA', label: 'La Estrella' },
-    { value: 'LITUECHE', label: 'Litueche' },
-    { value: 'MARCHIHUE', label: 'Marchihue' },
-    { value: 'NAVIDAD', label: 'Navidad' },
-    { value: 'PAREDONES', label: 'Paredones' },
-    { value: 'SAN FERNANDO', label: 'San Fernando' },
-    { value: 'CHÉPICA', label: 'Chépica' },
-    { value: 'CHIMBARONGO', label: 'Chimbarongo' },
-    { value: 'LOLOL', label: 'Lolol' },
-    { value: 'NANCAGUA', label: 'Nancagua' },
-    { value: 'PALMILLA', label: 'Palmilla' },
-    { value: 'PERALILLO', label: 'Peralillo' },
-    { value: 'PLACILLA', label: 'Placilla' },
-    { value: 'PUMANQUE', label: 'Pumanque' },
-    { value: 'SANTA CRUZ', label: 'Santa Cruz' },
-  ];
-
+    setFieldValue('comuna', '');
+    // Puedes agregar aquí la lógica para cargar las comunas de la región seleccionada.
+    // Puedes usar setFieldValue para actualizar el estado de comuna si es necesario.
+  };
 
   const validationSchema = Yup.object({
     rut: Yup.string()
@@ -107,6 +60,7 @@ export default function Solicitante({ formData }) {
         calle: '',
         numeroDeCalle: '',
         giro: '',
+        tipo: '',
         isEncargadoDeCompra: false,
         cupo: '',
         ...formApplication,
@@ -114,6 +68,13 @@ export default function Solicitante({ formData }) {
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
+        values.cupo = parseInt(values.cupo);
+        values.rut = format(values.rut);
+        if ((parseInt(values.rut.substring(0, 2), 10)) > 50) {
+          values.tipo = "Empresa"
+        } else {
+          values.tipo = "Persona"
+        }
         handleFormMove(clickedButton, handleBack, handleNext, values)
       }}
     >
@@ -205,9 +166,9 @@ export default function Solicitante({ formData }) {
                     <MenuItem value="" disabled>
                       Región
                     </MenuItem>
-                    {regionOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    {regiones.map((region, index) => (
+                      <MenuItem key={index} value={region.region}>
+                        {region.region}
                       </MenuItem>
                     ))}
                   </Field>
@@ -216,7 +177,6 @@ export default function Solicitante({ formData }) {
                   </FormHelperText>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-
                   <Field
                     label={"Comuna"}
                     name="comuna"
@@ -232,11 +192,13 @@ export default function Solicitante({ formData }) {
                     <MenuItem value="" disabled>
                       Comuna
                     </MenuItem>
-                    {comunaOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
+                    {regiones
+                      .find((region) => region.region === values.region)
+                      ?.comunas.map((comuna, index) => (
+                        <MenuItem key={index} value={comuna}>
+                          {comuna}
+                        </MenuItem>
+                      ))}
                   </Field>
                   <FormHelperText error={Boolean(errors.comuna)}>
                     {errors.comuna}

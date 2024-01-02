@@ -41,14 +41,14 @@ const EspeciesCantidad = ({ index, returnEspecies }) => {
           row.id === id ? { ...row, cantidad: newValue } : row
         );
         const newData = { ...prevData, rows: updatedRows };
-  
-        
+
+
         // Agregar un retraso de 300 milisegundos (ajusta según sea necesario)
         setTimeout(() => {
           updateEspeciesEstructura({ [index]: updatedRows });
           returnEspecies(updatedRows);
         }, 5);
-  
+
         return newData;
       });
     }
@@ -57,7 +57,7 @@ const EspeciesCantidad = ({ index, returnEspecies }) => {
   useEffect(() => {
     const especies = especiesEstructura[index] || [];
     console.log("especies temporales: ", especies);
-    
+
     const aa = formApplication.estructuras[index]?.especies;
     console.log("form app especies: ", aa);
 
@@ -88,11 +88,11 @@ const EspeciesCantidad = ({ index, returnEspecies }) => {
 
 
     const columns = [
-      { field: 'especieId', headerName: 'ID', flex: 1, ...headerAlignProps },
-      { field: 'nombre', headerName: 'Especie', flex: 2, ...headerAlignProps },
+      { field: 'nombre', headerName: 'Especie', flex: 2, ...headerAlignProps, disableColumnMenu: true },
       {
         field: 'cantidad',
         headerName: 'Cantidad',
+        disableColumnMenu: true,
         flex: 2,
         ...headerAlignProps,
         renderCell: (params) => (
@@ -111,6 +111,7 @@ const EspeciesCantidad = ({ index, returnEspecies }) => {
         headerName: 'Acción',
         flex: 1,
         ...headerAlignProps,
+        disableColumnMenu: true,
         renderCell: (params) => params.value,
       },
     ];

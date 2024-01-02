@@ -40,7 +40,7 @@ function ResponsiveDrawer(props) {
   const drawer = (
     <div>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 3 }}>
-        <img src={logo} alt="Logo" style={{ width: '100%', height: '100%' }} />
+        <img src={logo} alt="Logo" style={{ width: '90%', height: '100%' }} />
       </Box>
       <Divider />
       <List>

@@ -149,7 +149,6 @@ export default function DetalleSolicitud() {
                             fullWidth
                             size="large"
                             onClick={handleRevisarClick}
-                        // sx={{}}
                         >
                             Revisar
                         </Button>

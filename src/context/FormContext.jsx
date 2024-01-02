@@ -6,6 +6,7 @@ const FormContext = createContext();
 export const FormProvider = ({ children }) => {
 
   const [formApplication, setFormApplication] = useState({
+    tipo: 'Persona',
     estructuras: [
       {
         comuna: '',
@@ -33,8 +34,6 @@ export const FormProvider = ({ children }) => {
   const updateByPosition = (values) => {
     switch (activeStep) {
       case 0:
-        values.cupo = parseInt(values.cupo);
-        values.rut = format(values.rut);
         updateFormAplication(values);
         break;
       case 1:
@@ -47,7 +46,6 @@ export const FormProvider = ({ children }) => {
         updateFormAplication(values);
         break;
       case 4:
-        console.log(values)
         updateFormAplication(values);
         break;
       default:
@@ -61,20 +59,32 @@ export const FormProvider = ({ children }) => {
 
   const handleNext = (values) => {
     updateByPosition(values);
-    setActiveStep(
-      (formApplication.isEncargadoDeCompra === false && activeStep === 2) ?
-        activeStep + 2 :
-        activeStep + 1
-    );
+    setActiveStep((prevStep) => {
+      if (!formApplication.isEncargadoDeCompra && formApplication.tipo === 'Empresa' && prevStep === 2) {
+        return prevStep + 2;
+      } else if (formApplication.isEncargadoDeCompra && formApplication.tipo === 'Persona' && prevStep === 1) {
+        return prevStep + 2;
+      } else if (!formApplication.isEncargadoDeCompra && formApplication.tipo === 'Persona' && prevStep === 1) {
+        return prevStep + 3;
+      } else {
+        return prevStep + 1;
+      }
+    });
   };
 
   const handleBack = (values) => {
     updateByPosition(values);
-    setActiveStep(
-      (formApplication.isEncargadoDeCompra === false && activeStep === 4) ?
-        activeStep - 2 :
-        activeStep - 1
-    );
+    setActiveStep((prevStep) => {
+      if (!formApplication.isEncargadoDeCompra && formApplication.tipo === 'Empresa' && prevStep === 4) {
+        return prevStep - 2;
+      } else if (formApplication.isEncargadoDeCompra && formApplication.tipo === 'Persona' && prevStep === 3) {
+        return prevStep - 2;
+      } else if (!formApplication.isEncargadoDeCompra && formApplication.tipo === 'Persona' && prevStep === 4) {
+        return prevStep - 3;
+      } else {
+        return prevStep - 1;
+      }
+    });
   };
 
   const updateFormAplication = (newData) => {
@@ -120,7 +130,7 @@ export const FormProvider = ({ children }) => {
     especiesEstructura,
     formApplication,
     updateFormAplication,
-
+    setEspeciesEstructura,
   };
 
   return (

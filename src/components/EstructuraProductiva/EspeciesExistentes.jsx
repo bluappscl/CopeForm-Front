@@ -52,7 +52,6 @@ function EspeciesExistentes({ arrayIds, index }) {
         }));
 
         const columns = [
-          { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'center', align: 'center' },
           { field: 'especie', headerName: 'Especie', flex: 2, headerAlign: 'center', align: 'center' },
           {
             field: 'accion',
