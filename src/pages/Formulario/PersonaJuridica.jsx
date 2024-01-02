@@ -10,6 +10,7 @@ import { handleFormMove } from '../../utils/formUtils';
 import { useEffect } from 'react';
 import { format, validate } from 'rut.js';
 import InputAdornment from '@mui/material/InputAdornment';
+import Swal from 'sweetalert2';
 
 const validationSchema = Yup.object().shape({
     personasJuridicas: Yup.array().of(
@@ -20,7 +21,8 @@ const validationSchema = Yup.object().shape({
                     const formatRut = format(value);
                     return validate(formatRut);
                 }),
-            participacion: Yup.number().required('La Participación es requerida'),
+            participacion: Yup.number().required('La Participación es requerida').min(1, 'La participación no puede ser menor a 1')
+                .max(100, 'La participación no puede ser mayor a 100'),
             telefono: Yup.string()
                 .required('Requerido')
                 .matches(/^(?:\+569|9)\d{8}$/, 'Ingrese un número de teléfono válido'),
@@ -50,7 +52,7 @@ const PersonaJuridica = ({ formData }) => {
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     let participacionTotal = 0.0;
-                    values.personasJuridicas.map((persona) => {
+                    values.personasJuridicas.map((persona, index) => {
                         participacionTotal = participacionTotal + parseInt(persona.participacion);
                         persona.rut = format(persona.rut)
                         if ((parseInt(persona.rut.substring(0, 2), 10)) > 50) {
@@ -60,9 +62,12 @@ const PersonaJuridica = ({ formData }) => {
                         }
                     })
                     if (participacionTotal > 100 || participacionTotal < 1) {
-                        console.log("participacionTotal: ", participacionTotal)
-
-                        alert("La participación total debe estar entre 0.01 y 0.1");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Participacion incorrecta',
+                            html: `la participacion total de los socios no puede ser mayor a 100 ni menor a 1<br/>
+                            <span style="color: ${orange[900]};">actualmente es ${participacionTotal}</span>`,
+                        });
                         return;
                     }
 

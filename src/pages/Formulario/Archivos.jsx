@@ -109,12 +109,13 @@ export default function Archivos() {
                   type="file"
                   onChange={(event) => {
                     formik.setFieldValue(`archivos.${fileButton.name}`, event.currentTarget.files[0]);
-                  }} />
+                  }}
+                />
                 Seleccionar Archivo
               </Button>
               {selectedFileMessage(fileButton.name)}
-              {formik.touched[`archivos.${fileButton.name}`] && formik.errors[`archivos.${fileButton.name}`] && (
-                <div style={{ color: 'red' }}>{formik.errors[`archivos.${fileButton.name}`]}</div>
+              {formik.touched.archivos && formik.errors.archivos && (
+                <div style={{ color: 'red' }}>{formik.errors.archivos[fileButton.name]}</div>
               )}
             </Grid>
           ))}

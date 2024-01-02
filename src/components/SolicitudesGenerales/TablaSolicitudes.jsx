@@ -141,6 +141,8 @@ export default function TablaSolicitudes() {
                     creadoEl: formatDate(form.creadoEl),
                     estado: form.estado.nombre
                 }))
+
+                fillRows.sort((a, b) => b.id - a.id)
                 setRows(fillRows);
             })
     }, [selectedEstado]);
@@ -148,7 +150,7 @@ export default function TablaSolicitudes() {
     return (
         <Box sx={{ height: 800, width: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ marginLeft: 'auto' }}>
-                <Select value={selectedEstado} onChange={handleEstadoChange} displayEmpty sx={{width:'150px'}}>
+                <Select value={selectedEstado} onChange={handleEstadoChange} displayEmpty sx={{width:'150px', mb:2}}>
                     <MenuItem value="" disabled>
                         Filtrar por Estado
                     </MenuItem>
@@ -164,7 +166,7 @@ export default function TablaSolicitudes() {
                 rows={rows}
                 columns={columns}
                 rowSelection={false}
-                sortModel={initialSortModel}
+             
             />
         </Box>
     );
