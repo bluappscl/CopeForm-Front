@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconButton } from '@mui/material';
+import { Box, Button, IconButton, Modal, Paper } from '@mui/material';
 import { orange } from '@mui/material/colors';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axiosInstance from '../../../axiosInstance';
@@ -11,9 +11,8 @@ function EspeciesExistentes({ arrayIds, index }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
   const [idList, setIdList] = useState([]);
   const { especiesEstructura, updateEspeciesEstructura } = useFormContext();
+  const [modalOpen, setModalOpen] = useState(false);
 
-
-  // console.log("existentes: ", formEstructuraProductiva)
   useEffect(() => {
     setIdList(especiesEstructura[index] || []);
   }, [especiesEstructura]);
@@ -26,7 +25,6 @@ function EspeciesExistentes({ arrayIds, index }) {
         const updatedIdList = [...prevIdList, { id, nombre: nombre, cantidad: '' }];
         console.log("updatedIdList ", updatedIdList)
         updateEspeciesEstructura({ [index]: updatedIdList });
-        // returnIdList(updatedIdList);
         return updatedIdList;
       }
     });
@@ -38,7 +36,7 @@ function EspeciesExistentes({ arrayIds, index }) {
         const especies = response.data;
         const rows = especies.map((especie, index) => ({
           id: especie.id,
-          especie: especie.nombre,  // Ajusta este campo según la estructura de tu objeto especie
+          especie: especie.nombre,
           accion: (
             <IconButton variant="contained" sx={{
               backgroundColor: orange[600],
@@ -71,7 +69,7 @@ function EspeciesExistentes({ arrayIds, index }) {
       .catch((error) => {
         console.error('Error al obtener los datos de la API:', error);
       });
-  }, []);  // La dependencia vacía asegura que se ejecute solo una vez al montar el componente
+  }, []);
 
   const textosLocalizados = {
     columnMenuUnsort: "Quitar Orden",
@@ -82,13 +80,38 @@ function EspeciesExistentes({ arrayIds, index }) {
     columnMenuShowColumns: "Mostrar columnas"
   };
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        {...especiesData}
-        localeText={textosLocalizados}
-      />
-    </div>
+    <>
+      <Button variant='contained' size='small' style={{ marginRight: 'auto' }} onClick={handleOpenModal}>
+        Expandir Especies
+      </Button>
+      <Box>
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Paper style={{ height: '90%', width: '90%', overflow: 'hidden', margin: 'auto' }}>
+            <DataGrid
+              {...especiesData}
+              localeText={textosLocalizados}
+            />
+          </Paper>
+        </Modal>
+      </Box>
+      <Box style={{ height: 400, width: '100%' }}>
+        <DataGrid {...especiesData} localeText={textosLocalizados} />
+      </Box>
+    </>
   );
 }
 

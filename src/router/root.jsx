@@ -20,11 +20,11 @@ export const mainLinkItems = () => (
         Solicitudes
       </ListItemButton>
     </Link>
-    <Link to={`/form`} component={RouteLink} underline='none' color={'white'}>
+    {/* <Link to={`/form`} component={RouteLink} underline='none' color={'white'}>
       <ListItemButton>
         <DashboardIcon style={{ color: color }} sx={{ mx: 3, my: 1 }} />
         Form
       </ListItemButton>
-    </Link>
+    </Link> */}
   </nav>
 );

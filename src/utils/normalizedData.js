@@ -141,7 +141,6 @@ export const sectorPredominante = [
 ];
 
 export const tiposContacto = [
-    { value: "TIPO_ENCARGADO", label: "Tipo Encargado" },
     { value: "CONTACTO_COMERCIAL", label: "Contacto Comercial" },
     { value: "CONTACTO_FINANZAS", label: "Contacto Finanzas" },
     { value: "AUTORIZADO_RETIRAR", label: "Autorizado a Retirar" },
