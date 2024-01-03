@@ -7,6 +7,7 @@ import StepController from '../../components/Formulario/StepController';
 import { useFormContext } from '../../context/FormContext';
 import { handleFormMove } from '../../utils/formUtils';
 import { format, validate } from 'rut.js';
+import { tiposContacto } from '../../utils/normalizedData';
 
 const validationSchema = Yup.object().shape({
     encargadosDeCompra: Yup.array().of(
@@ -81,8 +82,11 @@ const EncargadoDeCompra = ({ formData }) => {
                                                 <MenuItem value="" disabled>
                                                     Tipo de encargado
                                                 </MenuItem>
-                                                <MenuItem value={1}>Valor 1</MenuItem>
-                                                <MenuItem value={2}>Valor 2</MenuItem>
+                                                {tiposContacto.map((option) => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
                                             </Field>
                                             <FormHelperText error={Boolean(errors.encargadosDeCompra?.[index]?.tipoEncargado)}>
                                                 {errors.encargadosDeCompra?.[index]?.tipoEncargado}

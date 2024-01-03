@@ -119,3 +119,34 @@ export const regiones = [
         "comunas": ["Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "Santiago", "San Joaquín", "San Miguel", "San Ramón", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"]
     }
 ]
+
+export const tenenciaPredios = [
+    { value: 'PROPIETARIO', label: 'Propietario' },
+    { value: 'ARRIENDO_TERCEROS', label: 'Arriendo terceros' },
+    { value: 'ARRIENDO_RELACIONADOS', label: 'Arriendo a relacionados' },
+    { value: 'LEASING_LEASEBACK', label: 'Leasing/Leaseback' },
+    { value: 'USUFRUCTO', label: 'Usufructo' },
+    { value: 'MEDIERÍA', label: 'Mediería' },
+    { value: 'COMODATO', label: 'Comodato' },
+];
+
+export const sectorPredominante = [
+    { value: "FRUTA", label: "Fruta" },
+    { value: "CULTIVO", label: "Cultivo" },
+    { value: "PECUARIO", label: "Pecuario" },
+    { value: "HORTALIZA", label: "Hortaliza" },
+    { value: "OTROS", label: "Otros" },
+    { value: "PRESTADORES DE SERVICIOS", label: "Prestadores de Servicios" },
+    { value: "SUBDISTRIBUIDOR", label: "Subdistribuidor" },
+];
+
+export const tiposContacto = [
+    { value: "TIPO_ENCARGADO", label: "Tipo Encargado" },
+    { value: "CONTACTO_COMERCIAL", label: "Contacto Comercial" },
+    { value: "CONTACTO_FINANZAS", label: "Contacto Finanzas" },
+    { value: "AUTORIZADO_RETIRAR", label: "Autorizado a Retirar" },
+    { value: "SOCIO", label: "Socio" },
+    { value: "DUEÑO", label: "Dueño" },
+    { value: "REPR. LEGAL", label: "Representante Legal" },
+    { value: "OTRO", label: "Otro" },
+];

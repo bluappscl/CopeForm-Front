@@ -12,7 +12,7 @@ import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesEx
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
 import EspeciesCantidadForBackOffice from '../../components/EstructuraProductiva/EspeciesCantidadForBackOffice';
-import { comunaOptions } from '../../utils/normalizedData';
+import { comunaOptions, sectorPredominante, tenenciaPredios } from '../../utils/normalizedData';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import Swal from 'sweetalert2';
 
@@ -189,9 +189,11 @@ const EstructuraProductiva = ({ formData }) => {
                                                             <MenuItem value="" disabled>
                                                                 Sector Predominante
                                                             </MenuItem>
-                                                            <MenuItem value="1">Papas</MenuItem>
-                                                            <MenuItem value="2">Comparito 2</MenuItem>
-                                                            <MenuItem value="3">Compardium</MenuItem>
+                                                            {sectorPredominante.map((option) => (
+                                                                <MenuItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </MenuItem>
+                                                            ))}
                                                         </Field>
                                                         <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].sectorPredominante)}>
                                                             {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].sectorPredominante}
@@ -211,9 +213,11 @@ const EstructuraProductiva = ({ formData }) => {
                                                             <MenuItem value="" disabled>
                                                                 Tenencia de Predios
                                                             </MenuItem>
-                                                            <MenuItem value="1">Arrendado</MenuItem>
-                                                            <MenuItem value="2">Comparito 2</MenuItem>
-                                                            <MenuItem value="3">Compardium</MenuItem>
+                                                            {tenenciaPredios.map((option) => (
+                                                                <MenuItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </MenuItem>
+                                                            ))}
                                                         </Field>
                                                         <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].tenenciaPredios)}>
                                                             {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].tenenciaPredios}

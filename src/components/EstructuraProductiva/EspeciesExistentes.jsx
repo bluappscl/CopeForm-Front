@@ -73,10 +73,21 @@ function EspeciesExistentes({ arrayIds, index }) {
       });
   }, []);  // La dependencia vacía asegura que se ejecute solo una vez al montar el componente
 
+  const textosLocalizados = {
+    columnMenuUnsort: "Quitar Orden",
+    columnMenuSortAsc: "Ordenar de forma ascendente",
+    columnMenuSortDesc: "Ordenar de forma descendente",
+    columnMenuFilter: "Filtrar",
+    columnMenuHideColumn: "Ocultar columna",
+    columnMenuShowColumns: "Mostrar columnas"
+  };
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid {...especiesData} />
+      <DataGrid
+        {...especiesData}
+        localeText={textosLocalizados}
+      />
     </div>
   );
 }
