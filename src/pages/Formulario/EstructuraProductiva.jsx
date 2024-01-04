@@ -50,7 +50,7 @@ const EstructuraProductiva = ({ formData }) => {
                 comuna: Yup.string().required('Comuna es requerida'),
                 rol: Yup.string()
                     .required('Rol es requerido')
-                    .matches(/^[A-Za-z]+-[A-Za-z]+$/, 'El formato de rol debe ser XX-XX.'),
+                    .matches(/^\d{3}-\d{4}$/, 'El formato de rol debe ser nnn-nnnn.'),
                 principalesClientes: Yup.string().required('Principales clientes es requerido'),
                 // especies: Yup.array().of(
                 //     Yup.object().shape({
