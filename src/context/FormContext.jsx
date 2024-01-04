@@ -9,6 +9,7 @@ export const FormProvider = ({ children }) => {
     tipo: 'Persona',
     estructuras: [
       {
+        region: '',
         comuna: '',
         especies: [
         ],

@@ -12,7 +12,7 @@ import EspeciesExistentes from '../../components/EstructuraProductiva/EspeciesEx
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EspeciesCantidad from '../../components/EstructuraProductiva/EspeciesCantidad';
 import EspeciesCantidadForBackOffice from '../../components/EstructuraProductiva/EspeciesCantidadForBackOffice';
-import { comunaOptions, sectorPredominante, tenenciaPredios } from '../../utils/normalizedData';
+import { comunaOptions, regiones, sectorPredominante, tenenciaPredios } from '../../utils/normalizedData';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import Swal from 'sweetalert2';
 
@@ -72,6 +72,7 @@ const EstructuraProductiva = ({ formData }) => {
     if (!formApplication?.estructuras?.length) {
         initialValues.estructuras.push({
             // Propiedades de la estructura vacía
+            region: '',
             sectorPredominante: '',
             tenenciaPredios: '',
             comuna: '',
@@ -139,6 +140,7 @@ const EstructuraProductiva = ({ formData }) => {
                                                 // disabled={arrayHelpers.form.values.personas.length === 10}
                                                 onClick={() => (
                                                     arrayHelpers.push({
+                                                        region: '',
                                                         sectorPredominante: '',
                                                         tenenciaPredios: '',
                                                         comuna: '',
@@ -175,6 +177,26 @@ const EstructuraProductiva = ({ formData }) => {
                                                         spacing: 3,
                                                     }}
                                                 >
+                                                    <Box display={'flex'} flexDirection={'column'} width={'100%'}>
+                                                        <Field
+                                                            placeholder="Región"
+                                                            name={`estructuras.${index}.region`}
+                                                            as={Select}
+                                                            label={"Región"}
+                                                            fullWidth
+                                                            variant="standard"
+                                                            displayEmpty
+                                                        >
+                                                            <MenuItem value="" disabled>
+                                                                Región
+                                                            </MenuItem>
+                                                            {regiones.map((region, index) => (
+                                                                <MenuItem key={index} value={region.region}>
+                                                                    {region.region}
+                                                                </MenuItem>
+                                                            ))}
+                                                        </Field>
+                                                    </Box>
                                                     <Box display={'flex'} flexDirection={'column'} width={'100%'}>
 
                                                         <Field
@@ -223,7 +245,21 @@ const EstructuraProductiva = ({ formData }) => {
                                                             {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].tenenciaPredios}
                                                         </FormHelperText>
                                                     </Box>
-                                                    <Box display={'flex'} flexDirection={'column'} width={'100%'}>
+                                                </Box>
+
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: { xs: 'column', md: 'row' },
+                                                        gap: 2,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        spacing: 3,
+                                                        mt: 1,
+                                                        mb: 2
+                                                    }}
+                                                >
+                                                    <Box display={'flex'} flexDirection={'column'} width={{ xs: '100%', sm: '100%', md: '50%', }} sx={{ mt: 2 }}>
                                                         <Field
                                                             placeholder="Comuna"
                                                             name={`estructuras.${index}.comuna`}
@@ -236,21 +272,20 @@ const EstructuraProductiva = ({ formData }) => {
                                                             <MenuItem value="" disabled>
                                                                 Comuna
                                                             </MenuItem>
-                                                            {comunaOptions.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
+                                                            {regiones
+                                                                .find((region) => region.region === estructura.region)
+                                                                ?.comunas.map((comuna, index) => (
+                                                                    <MenuItem key={index} value={comuna}>
+                                                                        {comuna}
+                                                                    </MenuItem>
+                                                                ))}
                                                         </Field>
                                                         <FormHelperText error={Boolean(errors.estructuras && errors.estructuras[index] && errors.estructuras[index].comuna)}>
                                                             {errors.estructuras && errors.estructuras[index] && errors.estructuras[index].comuna}
                                                         </FormHelperText>
                                                     </Box>
-                                                </Box>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={12} md={6}>
+                                                    <Box display={'flex'} flexDirection={'column'} width={'100%'}>
                                                         <Field
-                                                            sx={{ mt: 2 }}
                                                             name={`estructuras.${index}.rol`}
                                                             as={TextField}
                                                             label="Rol"
@@ -259,7 +294,12 @@ const EstructuraProductiva = ({ formData }) => {
                                                             error={Boolean(errors.estructuras?.[index]?.rol)}
                                                             helperText={errors.estructuras?.[index]?.rol}
                                                         />
-                                                    </Grid>
+                                                    </Box>
+                                                </Box>
+
+
+                                                <Grid container spacing={3}>
+
                                                     <Grid item xs={12} md={12}>
                                                         <Field
                                                             name={`estructuras.${index}.principalesClientes`}

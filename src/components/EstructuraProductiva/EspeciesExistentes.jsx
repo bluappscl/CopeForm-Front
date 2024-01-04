@@ -6,6 +6,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axiosInstance from '../../../axiosInstance';
 import { useEffect, useState } from 'react';
 import { useFormContext } from '../../context/FormContext';
+import CloseIcon from '@mui/icons-material/Close';
 
 function EspeciesExistentes({ arrayIds, index }) {
   const [especiesData, setEspeciesData] = useState({ columns: [], rows: [] });
@@ -100,12 +101,28 @@ function EspeciesExistentes({ arrayIds, index }) {
           aria-labelledby="modal-title"
           aria-describedby="modal-description"
         >
-          <Paper style={{ height: '90%', width: '90%', overflow: 'hidden', margin: 'auto' }}>
-            <DataGrid
-              {...especiesData}
-              localeText={textosLocalizados}
-            />
-          </Paper>
+          <>
+            <Paper style={{ height: '90%', width: '90%', overflow: 'hidden', margin: 'auto' }}>
+              <DataGrid
+                {...especiesData}
+                localeText={textosLocalizados}
+              />
+            </Paper>
+            <Button
+              variant='contained'
+              sx={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '90%',
+                backgroundColor: orange[600],
+                '&:hover': { backgroundColor: orange[700] },
+              }}
+              onClick={handleCloseModal}
+            >
+              Cerrar
+            </Button>
+          </>
         </Modal>
       </Box>
       <Box style={{ height: 400, width: '100%' }}>
